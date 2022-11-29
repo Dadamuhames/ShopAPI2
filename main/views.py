@@ -18,7 +18,9 @@ class HomePage(views.APIView):
         data['brands'] = Category.objects.filter(brand=True).filter(popular=True)[:12]
         product = Products.objects.filter(prod_of_day=True).first()
 
-        if product.DoesNotExist:
+        data['product_of_day'] = Products.objects.all().first()
+
+        if product is not None:
            data['product_of_day'] = product.get_default()
 
         serializer = HomePageSerializer(data)
