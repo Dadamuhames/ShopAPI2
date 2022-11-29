@@ -16,7 +16,10 @@ class HomePage(views.APIView):
         data['hits'] = ProductVariants.objects.filter(default=True).filter(Q(product__status='Published')).filter(hit=True)[:6]
         data['categories'] = Category.objects.filter(parent=None).filter(popular=True).exclude(brand=True)[:12]
         data['brands'] = Category.objects.filter(brand=True).filter(popular=True)[:12]
-        data['product_of_day'] = Products.objects.filter(prod_of_day=True).first().get_default()
+        product = Products.objects.filter(prod_of_day=True).first()
+
+        if product.DoesNotExist:
+           data['product_of_day'] = product.get_default()
 
         serializer = HomePageSerializer(data)
 
