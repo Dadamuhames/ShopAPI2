@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from shop import settings
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save, post_delete
+from .managers import UserManager
 # Create your models here.
 
 
@@ -30,6 +31,8 @@ class User(AbstractUser):
     post_ind = models.CharField('Post Index', max_length=6, blank=True, null=True)
 
     USERNAME_FIELD = 'nbm'
+
+    object = UserManager()
 
     def __str__(self):
         if not self.username:
