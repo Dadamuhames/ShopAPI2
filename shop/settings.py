@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import dj_database_url
+
 from corsheaders.defaults import default_headers
 from datetime import timedelta
 from pathlib import Path
@@ -235,4 +235,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 
 
-db_from_env = dj_database_url.config()
+

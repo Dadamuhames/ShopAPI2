@@ -82,3 +82,9 @@ class ProfileView(views.APIView):
         user = UserInformationSerializer(request.user).data
         return Response(user)
 
+
+
+# Sing Up
+class SingUpView(generics.CreateAPIView):
+    queryset = User.object.all()
+    #serializer_class = 
