@@ -76,6 +76,8 @@ class LoginView(views.APIView):
 
 # Dashboard
 class ProfileView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, format=None):
         user = UserInformationSerializer(request.user).data
         return Response(user)
