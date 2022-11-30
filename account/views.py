@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from .models import User
+import random
 
 
 # Check number
@@ -32,7 +33,8 @@ class CheckNubmer(views.APIView):
 # send sms
 class SendSms(views.APIView):
     def post(self, request, format=None):
-        pass
+        code = random.randint(100000, 999999)
+        print(code)
         
 
 
