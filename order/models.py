@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 import re
 from main.models import Products, ProductVariants
+import datetime
 # Create your models here.
 
 def telephone_validator(value):
@@ -37,26 +38,9 @@ class City(models.Model):
 
 class Order(models.Model):
     PAYMENT = [('Cash', 'Cash'), ('Online', 'Online')]
-    STATES = [
-        ("Андижанская область", "Андижанская область"),
-        ("Бухарская область   ", "Бухарская область   "),
-        ("Джизакская область ", "Джизакская область "),
-        ("Кашкадарьинская область  ", "Кашкадарьинская область  "),
-        ("Навоийская область", "Навоийская область"),
-        ("Наманганская область", "Наманганская область"),
-        ("Самаркандская область   ", "Самаркандская область"),
-        ("Сурхандарьинская область   ", "Сурхандарьинская область"),
-        ("Сырдарьинская область", "Сырдарьинская область"),
-        ("Ташкентская область", "Ташкентская область"),
-        ("Ферганская область", "Ферганская область"),
-        ("Хорезмская область", "Хорезмская область"),
-        ("Республика Каракалпакстан", "Республика Каракалпакстан"),
-        ("Город Ташкент", "Город Ташкент")
-    ]
     STATUS = [('Accepted', 'Accepted'), ('Performed', 'Performed'), ('Canseled', 'Canseled'), ('Paid', 'Paid')]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session = models.CharField('Session Key', max_length=255)
     price = models.FloatField('Price', validators=[MinValueValidator(1.00)])
     payment = models.CharField('Payment type', max_length=255, choices=PAYMENT)
     first_name = models.CharField('First Name', max_length=255)
@@ -65,9 +49,13 @@ class Order(models.Model):
     adres = models.CharField('Adres', max_length=255)
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='orders')
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='orders')
-    status = models.CharField('Status', max_length=255, choices=STATUS)
+    status = models.CharField('Status', max_length=255, default='Accepted', choices=STATUS)
     tel = models.CharField('Tel. number', max_length=13, validators=[telephone_validator])
-    date = models.DateTimeField('Date')
+    date = models.DateTimeField('Date', default=datetime.datetime.now())
+
+
+    def get_full_name(self):
+        return self.first_name + '' + self.last_name + '' + self.patronymic 
     
 
     def __str__(self):
@@ -76,7 +64,7 @@ class Order(models.Model):
 
 class OrderProducts(models.Model):
     product = models.ForeignKey(ProductVariants, on_delete=models.CASCADE)
-    order= models.ForeignKey(Order, on_delete=models.CASCADE)
+    order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name='products')
     qty = models.PositiveIntegerField('Qty')
     price = models.FloatField('Price', validators=[MinValueValidator(1.00)])
 
@@ -97,7 +85,7 @@ class OrderHistory(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='history')
     status = models.CharField('Status', max_length=255)
     comment = models.CharField('Comment', max_length=255)
-    date = models.DateTimeField('Date')
+    date = models.DateTimeField('Date', default=datetime.datetime.now())
 
     def __str__(self):
         return f'Order №{self.order.id} status => {self.status}'
@@ -105,7 +93,7 @@ class OrderHistory(models.Model):
 
 
 class OrderData(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='data')
     ip = models.GenericIPAddressField('Ip')
     forw_ip = models.GenericIPAddressField('Forwarded Ip')
     user_agent = models.CharField('User Agent', max_length=255)

@@ -29,10 +29,11 @@ class User(AbstractUser):
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='users', blank=True, null=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='users', blank=True, null=True)
     post_ind = models.CharField('Post Index', max_length=6, blank=True, null=True)
+    code = models.CharField('Verify code', max_length=6)
 
     USERNAME_FIELD = 'nbm'
 
-    object = UserManager()
+    objects = UserManager()
 
     def __str__(self):
         if not self.username:
@@ -44,5 +45,7 @@ class User(AbstractUser):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
 
 

@@ -8,14 +8,15 @@ class UserManager(BaseUserManager):
         Creates and saves a User with the given email and password.
         """
         if not nbm:
-            raise ValueError('The given email must be set')
-        nbm = self.normalize_email(nbm)
+            print(nbm, password)
+            raise ValueError('The given number must be set')
         user = self.model(nbm=nbm, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
     def create_user(self, nbm, password=None, **extra_fields):
+        print('some')
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(nbm, password, **extra_fields)
 
