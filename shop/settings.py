@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 
-from corsheaders.defaults import default_headers
+#from corsheaders.defaults import default_headers
 from datetime import timedelta
 from pathlib import Path
 import os
@@ -227,11 +227,11 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 
-CORS_ALLOW_HEADERS = default_headers + (
-    'Access-Control-Allow-Headers',
-    'Access-Control-Allow-Credentials',
-    'Access-Control-Allow-Origin',
-)
+#CORS_ALLOW_HEADERS = default_headers + (
+#    'Access-Control-Allow-Headers',
+#    'Access-Control-Allow-Credentials',
+#    'Access-Control-Allow-Origin',
+#)
 
 
 CORS_ALLOW_CREDENTIALS = True
