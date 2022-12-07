@@ -45,6 +45,15 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        ctg = super(Category, self).save(*args, **kwargs)
+        if ctg.parent is not None:
+            for atr in ctg.parent.atributs.all():
+                if atr not in ctg.atributs.all():
+                    ctg.atributs.add(atr)
+
+        return ctg
+
     
 '''@receiver(post_save, sender=Category)
 def set_atributs(sender, instance, *args, **kwargs):
