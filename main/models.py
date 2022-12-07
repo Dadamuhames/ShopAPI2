@@ -51,6 +51,7 @@ class Category(models.Model):
             for atr in ctg.parent.atributs.all():
                 if atr not in ctg.atributs.all():
                     ctg.atributs.add(atr)
+                    print(atr)
 
         return ctg
 
