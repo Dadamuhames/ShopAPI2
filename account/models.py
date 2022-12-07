@@ -29,9 +29,10 @@ class User(AbstractUser):
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='users', blank=True, null=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='users', blank=True, null=True)
     post_ind = models.CharField('Post Index', max_length=6, blank=True, null=True)
-    code = models.CharField('Verify code', max_length=6)
+    code = models.CharField('Verify code', max_length=6, blank=True, null=True)
 
     USERNAME_FIELD = 'nbm'
+
 
     objects = UserManager()
 

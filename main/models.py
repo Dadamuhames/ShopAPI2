@@ -40,6 +40,7 @@ class Category(models.Model):
     atributs = models.ManyToManyField(Atributs, blank=True, null=True)
     popular = models.BooleanField('Popular', default=False)
     brand = models.BooleanField("Is Brand", default=False)
+    icon = ThumbnailerImageField(upload_to='category_icons', blank=True, null=True)
 
     def __str__(self):
         return self.name

@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Products, ProductVariants, Category, ProductImages, Atributs, AtributOptions, Color, Comments
+import django_filters.rest_framework as filter
+from .filters import ProductVariantFilter
 
 
 # for product img
@@ -7,6 +9,8 @@ class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImages
         fields = ['image']
+
+
 
 
 # for color
@@ -17,11 +21,11 @@ class ColorSerializer(serializers.ModelSerializer):
 
 # for product
 class ProductSerializer(serializers.ModelSerializer):
-    #colors = ColorSerializer(many=True)
+    colors = ColorSerializer(many=True)
 
     class Meta:
         model = Products
-        exclude = ['category', 'colors']
+        fields = '__all__'
 
 
 # for atributs
@@ -48,7 +52,7 @@ class ProductVariantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductVariants
-        fields = ['id', 'product', 'price', 'qty', 'images']
+        fields = ['id', 'product', 'price', 'qty', 'images', 'color']
 
     
     def to_representation(self, instance):
@@ -72,7 +76,7 @@ class ProductVariantSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'image']
+        fields = ['id', 'name', 'image', 'icon']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -109,7 +113,7 @@ class CtegoryDeteilSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'inf', 'children']
+        fields = ['id', 'name', 'inf', 'children', 'icon', 'image']
 
 
 class CategoryParentSerializer(serializers.Serializer):
@@ -117,6 +121,7 @@ class CategoryParentSerializer(serializers.Serializer):
         data = {}
         data['id'] = value.id
         data['name'] = value.name
+        data['icon'] = value.icon
         data['parent'] = CategoryParentSerializer(value.parent).data
 
         return data
@@ -143,6 +148,7 @@ class CategoryProductsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+        
 class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
@@ -192,11 +198,7 @@ class ProductVeriantDetailSerializer(serializers.ModelSerializer):
 
             data['atributs'].append(atr_data)
 
-        
-
         colors = instance.product.colors.all()
-        
-
         data['colors'] = []
 
         for color in colors:
@@ -222,7 +224,7 @@ class AllCetegories(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['name', 'children', 'id']
+        fields = ['name', 'children', 'id', 'icon']
 
 
 
@@ -242,6 +244,18 @@ class CartSerializer(serializers.Serializer):
 class CartViewSerializer(serializers.Serializer):
     cart = CartSerializer()
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        total = 0
+        for it in instance['cart']:
+            total += float(it['price'])
+
+        data['total'] = total
+        data['count'] = len(instance['cart'])
+
+        return data
+
 
 class WishItemSerializer(serializers.Serializer):
     def to_representation(self, instance):
@@ -254,5 +268,6 @@ class WishItemSerializer(serializers.Serializer):
         return data
 
 
+# wishlist serializer
 class WishlistSerializer(serializers.Serializer):
-    wishlist = WishItemSerializer()
+    list = WishItemSerializer()

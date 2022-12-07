@@ -1,0 +1,248 @@
+{% extends 'admins/dist/admin-base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'admins/src/css/edit-page.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content" data-select2-id="select2-data-kt_content">
+    <!--begin::Tab pane-->
+    <form id="kt_ecommerce_add_product_form" enctype="multipart/form-data" method="post" style="padding: 50px; padding-top:0px;">
+        {% csrf_token %}
+        <div class="tab-pane fade active show" id="kt_ecommerce_add_product_images" role="tab-panel">
+            <div class="d-flex flex-column gap-7 gap-lg-10">
+                <!--begin::Category & tags-->
+                <div class="card card-flush py-4">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                            <h2>Product And Atributs</h2>
+                        </div>
+                        <!--end::Card title-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0" id="atribut-container">
+                        <label for="product">Product</label>
+                        {{ form.product }}<br>
+                        <div class="atribut-content">
+                            {% for atribut in variant.product.category.atributs.all %}
+                            <label class="form-label" id="ctg-label-for-data">{{ atribut.name }}</label>
+                            <select name="atribut_{{ atribut.name }}" class="form-select mb-2" required>
+                                <option value="">-----</option>
+                                {% for option in atribut.parametrs.all %}
+                                <option value="{{ option.id }}" {% if option in variant.atribut.all %} selected {% endif %}>{{ option.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="text-muted fs-7 mb-7">Add atribut to product</div>
+                            {% endfor %}                        
+                        </div>
+
+                        <!--begin::Button-->
+                        <a href="{% url 'add-ctg' %}" class="btn btn-light-primary btn-sm mb-10"
+                            style="margin-bottom: 0 !important;">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr087.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="11" y="18" width="12" height="2" rx="1" transform="rotate(-90 11 18)"
+                                        fill="currentColor"></rect>
+                                    <rect x="6" y="11" width="12" height="2" rx="1" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->Create new atribut
+                        </a>
+                        <!--end::Button-->
+                        <!--begin::Input group-->
+
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Category & tags-->
+                {% if type != "Add" %}
+                <div class="card card-flush py-4">
+                    <div class="card-header">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                            <h2>Default Variant Information</h2>
+                        </div>
+                        <!--end::Card title-->
+                    </div>
+                    <div class="card-body pt-0" id="atribut-container">
+                        <div class="mb-10 fv-row fv-plugins-icon-container" style="margin-bottom: 0 !important;">
+                            <!--begin::Label-->
+                            <label class="required form-label">Price</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            {{ form.price }}
+                            {{ form.errors.price }}
+                            <!--end::Input-->
+                            <!--begin::Description-->
+                            <div class="text-muted fs-7">Set the product price.</div>
+                            <!--end::Description-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                        </div>
+                        <div class="mb-10 fv-row fv-plugins-icon-container" style="margin-bottom: 0 !important;">
+                            <!--begin::Label-->
+                            <label class="required form-label">Quantity</label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            {{ form.qty }}
+                            {{ form.errors.qty }}
+                            <!--end::Input-->
+                            <!--begin::Description-->
+                            <div class="text-muted fs-7">Set the product quantity.</div>
+                            <!--end::Description-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="card card-flush py-4">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                            <h2>Default Color</h2>
+                        </div>
+                        <div class="color-block" {% if variant %} style="background: {{ variant.color.color }};" {% endif %}></div>
+                        <!--end::Card title-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0" id="atribut-container">
+                        <label class="form-label">Color</label>
+                        <!--end::Label-->
+                        <!--begin::Select2-->
+                        <select name="color" id="colors-select" class="form-select mb-2" required>
+                            <option value="">-----</option>
+                            {% for color in colors %}
+                                {% if variant.color == color %}
+                                    <option value="{{ color.id }}" data-color="{{ color.color }}" selected>{{ color.name }}</option>
+                                {% else %}
+                                    <option value="{{ color.id }}" data-color="{{ color.color }}">{{ color.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+
+                        <!--begin::Button-->
+                        <a href="{% url 'add-ctg' %}" class="btn btn-light-primary btn-sm mb-10"
+                            style="margin-bottom: 0 !important;">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr087.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="11" y="18" width="12" height="2" rx="1" transform="rotate(-90 11 18)"
+                                        fill="currentColor"></rect>
+                                    <rect x="6" y="11" width="12" height="2" rx="1" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->Create new color
+                        </a>
+                        <!--end::Button-->
+                        <!--begin::Input group-->
+
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Category &-->
+                <!--begin::General options-->
+                <div class="card card-flush py-4">
+                    <!--begin::Card header-->
+
+                    <div class="choosen-images-block card-body pt-0" style="padding-top: 50px !important;"
+                        id="chosen-images-d-flex">
+                        {% for img in variant.image.all %}
+                        <div class="chs-image" data-image-id="{{ img.id }}">
+                            <span data-url="{% url 'del-image' img.id %}" data-image-id="{{ img.id }}"
+                                class="del-image-btn">x</span>
+                            <img src="{{ img.file.cart.url }}" alt="">
+                        </div>
+                        {% endfor %}
+                        <li>You can't undo image deletion!</li>
+                    </div>
+
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+
+                    <!--end::Card header-->
+                </div>
+                <!--end::General options-->
+                <!--begin::Media-->
+                <div class="card card-flush py-4">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>Default Image</h2>
+                        </div>
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <!--<input type="file" name="files" id="image_files" multiple>-->
+                        <!--begin::Input group-->
+                        <input type="file" name="files" class="image_files" multiple>
+                        <div class="fv-row mb-2">
+                            <!--<input type="file" name="files" id="image_files" multiple>-->
+                            <!--begin::Dropzone-->
+                            <div class="dropzone dz-clickable" id="kt_ecommerce_add_product_media">
+                                <!--begin::Message-->
+                                <div class="dz-message needsclick">
+                                    <!--begin::Icon-->
+                                    <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                    <!--end::Icon-->
+                                    <!--begin::Info-->
+                                    <div class="ms-4">
+                                        <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Drop files here or
+                                            click to upload.</h3>
+                                        <span class="fs-7 fw-bold text-gray-400">Upload up to 10
+                                            files</span>
+                                    </div>
+                                    <!--end::Info-->
+                                </div>
+                            </div>
+                            <!--end::Dropzone-->
+                        </div>
+                        <!--end::Input group-->
+                        <!--begin::Description-->
+                        <div class="text-muted fs-7">Set the product media gallery.</div>
+                        <!--end::Description-->
+                    </div>
+                    <!--end::Card header-->
+                </div>
+                <!--end::Media-->
+                <!--begin::Pricing-->
+
+                <!--end::Pricing-->
+            </div>
+            <div class="d-flex justify-content-end" style="margin-top: 30px;">
+                <!--begin::Button-->
+                <a href="{{ request.path }}" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5">Cancel</a>
+                <!--end::Button-->
+                <!--begin::Button-->
+                <button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary">
+                    <span class="indicator-label">Save Changes</span>
+                    <span class="indicator-progress">Please wait...
+                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                </button>
+                <!--end::Button-->
+            </div>
+        </div>
+    </form>
+    <!--end::Tab pane-->    
+</div>
+
+
+<script src="{% static 'admins/src/js/add-variant.js' %}"></script>
+<script src="{% static 'admins/src/js/edit-prod.js' %}"></script>
+<script src="{% static 'assets/plugins/global/plugins.bundle.js' %}"></script>
+<script src="{% static 'assets/js/custom/scripts.bundle.js' %}"></script>
+<script src="{% static 'assets/plugins/custom/datatables/datatables.bundle.js' %}"></script>
+<script src="{% static 'assets/plugins/custom/formrepeater/formrepeater.bundle.js' %}"></script>
+<script src="{% static 'assets/js/custom/widgets.bundle.js' %}"></script>
+<script src="{% static 'assets/js/custom/utilities/modals/upgrade-plan.js' %}"></script>
+<script src="{% static 'assets/js/custom/utilities/modals/create-app.js' %}"></script>
+<script src="{% static 'assets/js/custom/utilities/modals/users-search.js' %}"></script>
+{% endblock %}
+
+

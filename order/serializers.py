@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import Order, OrderData, OrderHistory, OrderProducts, City, State
+from .models import Order, OrderData, OrderHistory, OrderProducts, City, State, Promocode, PaymentTyps
 import datetime
 from main.serializers import ProductVariantSerializer
+from main.serializers import ReqursiveCategorySerializer
 
 
 # order products serializer
@@ -34,17 +35,36 @@ class CitySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# order history serializer
+class HistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderHistory
+        fields = '__all__'
+
+
+# payment typs serializer
+class PaymentTypeSerializer(serializers.ModelSerializer):
+    children = ReqursiveCategorySerializer(many=True)
+
+    class Meta:
+        model = PaymentTyps
+        fields = '__all__'
+
+
 # order serializer
 class OrderSerializer(serializers.ModelSerializer):
     products = OrderProductsSerializer(many=True, read_only=True)
-    data = OrderDataSerializer(read_only=True)
-    state = StateSerializer()
-    city = CitySerializer()
+    data = OrderDataSerializer(many=True, read_only=True)
+    #state = StateSerializer(read_only=True)
+    #city = CitySerializer(read_only=True)
+    history = HistorySerializer(many=True, read_only=True)
+    user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Order
         fields = '__all__'
-        read_only = ['date']
+        read_only_fields = ['date', 'products', 'update_date']
+
 
 
     def create(self, validated_data):
@@ -65,4 +85,11 @@ class OrderSerializer(serializers.ModelSerializer):
         return instance
 
 
-
+#        code = validated_data.get('code')
+#         if code is not None:
+#           try:
+#               promocode = Promocode.objects.get(code=code)
+#               validated_data['promocode'] = promocode.id
+#           except:
+#               pass
+#       name = validated_data.get('name')
