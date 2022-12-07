@@ -24,7 +24,6 @@ urlpatterns = [
     path('api/', include('main.urls')),
     path("api/account/", include('account.urls')),
     path('api/order/', include('order.urls')),
-    path('api/admin/', include("admins.urls")),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api-auth/', include("djoser.urls")),

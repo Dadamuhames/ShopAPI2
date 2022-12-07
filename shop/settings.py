@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xz0mg(%jhattp$pod-kl15$c)tdkna(2avkv(egco2(o(d(aq1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework', 'rest_framework.authtoken',
     'account', 'order', 'colorfield',
     'ckeditor_uploader', 'ckeditor',
-    'django_filters', 'admins'
+    'django_filters'
 ]
 
 MIDDLEWARE = [
