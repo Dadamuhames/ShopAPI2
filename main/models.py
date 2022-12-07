@@ -37,30 +37,34 @@ class Category(models.Model):
     image = ThumbnailerImageField(upload_to='category_images')
     inf = models.TextField('Deskription')
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='children')
-    atributs = models.ManyToManyField(Atributs, blank=True, null=True)
+    atributs = models.ManyToManyField(Atributs, blank=True, null=True, editable=False)
     popular = models.BooleanField('Popular', default=False)
     brand = models.BooleanField("Is Brand", default=False)
-    icon = ThumbnailerImageField(upload_to='category_icons', blank=True, null=True)
+    icon = ThumbnailerImageField(upload_to='category_icons')
 
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
+'''    def save(self, *args, **kwargs):
         ctg = super(Category, self).save(*args, **kwargs)
+        print(ctg)
         if ctg.parent is not None:
             for atr in ctg.parent.atributs.all():
                 if atr not in ctg.atributs.all():
                     ctg.atributs.add(atr)
                     print(atr)
 
-        return ctg
+        return ctg'''
 
     
-'''@receiver(post_save, sender=Category)
-def set_atributs(sender, instance, *args, **kwargs):
-    if instance.parent is not None:
-        for atr in instance.parent.atributs.all():
-            instance.atributs.add(atr)'''
+@receiver(post_save, sender=Category)
+def set_atributs(sender, instance, created, *args, **kwargs):
+    if created:
+        if instance.parent is not None:
+            for atr in instance.parent.atributs.all():
+                instance.atributs.add(atr.id)
+                instance.save()
+                print(instance.atributs.all())
 
 
 

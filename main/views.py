@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, views, generics, mixins, status, filters
 from .models import Products, ProductVariants, Category
-from .serializers import HomePageSerializer, CotalogSerializer, CtegoryDeteilSerializer, CategoryProductsSerializer, ProductVeriantDetailSerializer, AllCetegories
+from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer
 from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer
 from rest_framework.response import Response
 from django.db.models import Q
@@ -10,34 +10,12 @@ from .filters import ProductVariantFilter, ProductFilterBackend
 from django_filters import rest_framework as filter
 # Create your views here.
 
-# view for home page
-class HomePage(views.APIView):
-    def get(self, request, *args, **kwargs):
-        data = {}
-
-        data['products'] = ProductVariants.objects.filter(default=True).filter(Q(product__status='Published')).filter(popular=True)[:12]
-        data['hits'] = ProductVariants.objects.filter(default=True).filter(Q(product__status='Published')).filter(hit=True)[:6]
-        data['categories'] = Category.objects.filter(parent=None).filter(popular=True).exclude(brand=True)[:12]
-        data['brands'] = Category.objects.filter(brand=True).filter(popular=True)[:12]
-        product = Products.objects.filter(prod_of_day=True).first()
-
-        data['product_of_day'] = Products.objects.all().first()
-
-        if product is not None:
-           data['product_of_day'] = product.get_default()
-
-        serializer = HomePageSerializer(data)
-
-        return Response(serializer.data)
-
 
 # paginators
 class CotalogPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = 'page_size'
     max_page_size = 20
-
-
 
 
 # popular products
@@ -71,21 +49,6 @@ class ProductsOfDay(generics.ListAPIView):
     serializer_class = ProductVariantSerializer
 
 
-
-# view for cotalog page
-class CotalogView(views.APIView):
-    def get(self, request, *args, **kwargs):
-        data = {}
-
-        data['products'] = ProductVariants.objects.filter(default=True).filter(Q(product__status='Published')).exclude(hit=True)
-        data['hit_products'] = ProductVariants.objects.filter(default=True).filter(Q(product__status='Published')).filter(hit=True)
-
-        serializer = CotalogSerializer(data)
-
-        return Response(serializer.data)
-
-
-
 # view for categories without parents
 class CategoryDeteilView(generics.RetrieveAPIView):
     queryset = Category.objects.exclude(brand=True)
@@ -94,16 +57,6 @@ class CategoryDeteilView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-
-
-# view for categories with parent
-class CategoryProducts(generics.RetrieveAPIView):
-    queryset = Category.objects.exclude(parent=None).exclude(brand=True)
-    serializer_class = CategoryProductsSerializer
-    #pagination_class = CotalogPagination ////***\\\\
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
 
 
 # filter view
@@ -141,18 +94,13 @@ class ProductsList(generics.ListAPIView):
 
 
     def get_queryset(self):
-        id = self.request.GET.get('category')
+        id = self.request.GET.get('category', 0)
         products = ProductVariants.objects.filter(default=True).filter(product__status='Published')
 
-        if id is None or id == '':
-            return products
-
-        try:
-            ctg = Category.objects.get(id=int(id))
-        except:
-            return products
-
-
+        if id == '':
+            id = 0
+        
+        ctg = get_object_or_404(Category.objects.all(), id=int(id))
         return products.filter(product__category=ctg)
 
 
@@ -361,9 +309,19 @@ class Matching(views.APIView):
         return Response(data)
         
 
+# get product comments
+class CommentsView(generics.ListAPIView):
+    serializer_class = CommentsSerializer
+    pagination_class = CotalogPagination
 
 
+    def get_queryset(self):
+        id = self.request.GET.get("id", 0)
+        if id == '':
+            id = 0
+        product = get_object_or_404(ProductVariants.objects.all(), id=int(id))
 
+        return product.comments.filter(status='Published')
 
 
 
