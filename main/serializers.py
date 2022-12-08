@@ -134,6 +134,7 @@ class CommentsSerializer(serializers.ModelSerializer):
 class ProductVeriantDetailSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
     color = ColorSerializer()
+    images = ProductImageSerializer(many=True)
 
     class Meta: 
         model = ProductVariants
