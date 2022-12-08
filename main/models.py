@@ -37,7 +37,7 @@ class Category(models.Model):
     image = ThumbnailerImageField(upload_to='category_images')
     inf = models.TextField('Deskription')
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='children')
-    atributs = models.ManyToManyField(Atributs, blank=True, null=True, editable=False)
+    atributs = models.ManyToManyField(Atributs, blank=True, null=True)
     popular = models.BooleanField('Popular', default=False)
     brand = models.BooleanField("Is Brand", default=False)
     icon = ThumbnailerImageField(upload_to='category_icons')
