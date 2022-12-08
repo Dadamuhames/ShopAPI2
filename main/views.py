@@ -45,7 +45,7 @@ class PopularBrands(generics.ListAPIView):
 
 # product of day
 class ProductsOfDay(generics.ListAPIView):
-    queryset = Products.objects.filter(prod_of_day=True)
+    queryset = ProductVariants.objects.filter(prod_of_day=True)
     serializer_class = ProductVariantSerializer
 
 
