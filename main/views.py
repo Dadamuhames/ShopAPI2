@@ -265,7 +265,7 @@ class SearchView(generics.ListAPIView):
 
 
 # matching
-class Matching(views.APIView):
+class Matching(views.APIView): 
     # add to matching
     def post(self, request, format=None):
         request.session['matching'] = request.session.get('matching', list())
