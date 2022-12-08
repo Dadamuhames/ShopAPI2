@@ -43,7 +43,7 @@ class OrderCreateView(generics.ListCreateAPIView, mixins.RetrieveModelMixin):
 
         # may be another name
         # get products part
-        '''lst = self.request.data.get('DEFAULT')
+        lst = self.request.data.get('products')
 
         for it in lst:
             pass
@@ -56,7 +56,7 @@ class OrderCreateView(generics.ListCreateAPIView, mixins.RetrieveModelMixin):
                 product = product,
                 price = price,
                 qty = int(it['count'])
-            )'''
+            )
 
 
 
