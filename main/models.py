@@ -83,6 +83,8 @@ class Products(models.Model):
     manufacturer = models.CharField('Manufacturer', max_length=255)
     model = models.CharField('Model', max_length=255)
     prod_of_day = models.BooleanField('Product of day', default=False)
+    popular = models.BooleanField('Popular', default=False)
+    hit = models.BooleanField("Is Hit Product", default=False)
 
 
     def get_default(self):
@@ -99,8 +101,6 @@ class ProductVariants(models.Model):
     color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='product_variants')
     qty = models.PositiveIntegerField('Qty')
     rating = models.PositiveIntegerField('Rating', validators=[MaxValueValidator(5), MinValueValidator(1)], blank=True, null=True)
-    popular = models.BooleanField('Popular', default=False)
-    hit = models.BooleanField("Is Hit Product", default=False)
     options = models.ManyToManyField(AtributOptions, blank=True)
 
     def __str__(self):

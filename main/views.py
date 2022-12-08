@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, views, generics, mixins, status, filters
 from .models import Products, ProductVariants, Category
 from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer
-from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer
+from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer, ProductVeriantRepresent
 from rest_framework.response import Response
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
@@ -20,15 +20,14 @@ class CotalogPagination(PageNumberPagination):
 
 # popular products
 class PopularProducts(generics.ListAPIView):
-    queryset = ProductVariants.objects.filter(default=True).filter(Q(product__status='Published')).filter(popular=True)
-    serializer_class = ProductVariantSerializer
+    queryset = Products.objects.filter(status='Published').filter(popular=True)
+    serializer_class = ProductVeriantRepresent
 
 
 # hit products
 class HitProductView(generics.ListAPIView):
-    queryset = ProductVariants.objects.filter(default=True).filter(
-        Q(product__status='Published')).filter(hit=True)
-    serializer_class = ProductVariantSerializer
+    queryset = Products.objects.filter(status='Published').filter(hit=True)
+    serializer_class = ProductVeriantRepresent
 
 
 # popular categories
