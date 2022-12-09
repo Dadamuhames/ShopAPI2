@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, views, generics, mixins, status, filters
-from .models import Products, ProductVariants, Category, Color
+from .models import Products, ProductVariants, Category, Color, Brand
 from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer
 from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer, ProductVeriantRepresent
 from rest_framework.response import Response
@@ -38,7 +38,7 @@ class PopularCategoriesView(generics.ListAPIView):
 
 # brand view
 class PopularBrands(generics.ListAPIView):
-    queryset = Category.objects.filter(popular=True)[:12]
+    queryset = Brand.objects.filter(popular=True)[:12]
     serializer_class = CartViewSerializer
 
 

@@ -58,6 +58,7 @@ class Category(models.Model):
 
 class Brand(models.Model):
     name = models.CharField('Name', max_length=255)
+    popular = models.BooleanField('Popular', default=False)
 
     def __str__(self):
         return self.name
