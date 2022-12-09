@@ -145,6 +145,33 @@ class ProductsList(generics.ListAPIView):
     filterset_class = ProductVariantFilter
 
     def get_queryset(self):
+        queryset = ProductVariants.objects.filter(product__status='Published')
+        ctg_id = self.request.GET.get('ctg_id')
+
+        if ctg_id == None or ctg_id == '':
+            return queryset
+
+        try:
+            ctg = Category.objects.get(id=int(ctg_id))
+        except:
+            return queryset
+
+        queryset = queryset.filter(product__category=ctg)
+        for item in self.request.GET:
+            if 'atribut_' in item:
+                queryset = queryset.filter(option=int(self.request.GET[item]))
+
+        for item in self.request.GET:
+            if 'color_' in item:
+                try:
+                    color = Color.objects.get(id=int(self.request.GET[item]))
+                    queryset = queryset.filter(color=color)
+                except:
+                    pass
+
+        return queryset
+
+'''    def get_queryset(self):
         id = self.request.GET.get('category', 0)
         brand = self.request.GET.get('brand', 0)
         products = ProductVariants.objects.filter(product__status='Published')
@@ -182,7 +209,7 @@ class ProductsList(generics.ListAPIView):
                     pass
 
         
-        return [] if products == ProductVariants.objects.filter(product__status='Published') else products
+        return [] if products == ProductVariants.objects.filter(product__status='Published') else products'''
 
 
 
