@@ -13,9 +13,9 @@ from django_filters import rest_framework as filter
 
 # paginators
 class CotalogPagination(PageNumberPagination):
-    page_size = 20
+    page_size = 1
     page_size_query_param = 'page_size'
-    max_page_size = 20
+    max_page_size = 1
 
 
 # colors 
