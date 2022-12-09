@@ -93,7 +93,7 @@ class ProductVeriantRepresent(serializers.Serializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'image']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -130,7 +130,7 @@ class CtegoryDeteilSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'inf', 'children', 'parent', 'atributs']
+        fields = ['id', 'name', 'inf', 'children', 'parent', 'atributs', 'image']
 
 
         
