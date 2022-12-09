@@ -124,7 +124,7 @@ class CategoryParentSerializer(serializers.Serializer):
 
 # Serializer for category
 class CtegoryDeteilSerializer(serializers.ModelSerializer):
-    children = CategorySerializer(many=True, read_only=True)
+    children = ReqursiveCategorySerializer(many=True, read_only=True)
     parent = CategoryParentSerializer()
     atributs = AtributSerializer(many=True)
 
