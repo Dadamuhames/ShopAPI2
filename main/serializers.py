@@ -29,6 +29,7 @@ class ColorSerializer(serializers.ModelSerializer):
 # for product
 class ProductSerializer(serializers.ModelSerializer):
     colors = ColorSerializer(many=True)
+    brand = serializers.ReadOnlyField('brand.name')
 
     class Meta:
         model = Products
