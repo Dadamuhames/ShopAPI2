@@ -151,37 +151,38 @@ class ProductsList(generics.ListAPIView):
 
         if id == '':
             id = 0
-        
+
         if brand == '':
             brand = 0
 
-        if id != 0 and brand != 0:
-            brand = get_object_or_404(Brand.objects.all(), id=int(brand))
-            ctg = get_object_or_404(Category.objects.all(), id=int(id))
-            products.filter(product__category=ctg, product__brand=brand)
-        elif id != 0:
-            ctg = get_object_or_404(Category.objects.all(), id=int(id))
+        try:
+            ctg = Category.objects.get(id=int(id))
             products.filter(product__category=ctg)
+        except:
+            pass
 
-            for item in self.request.GET:
-                if 'atribut_' in item:
-                    products = products.filter(option=int(self.request.GET[item]))
 
-                if 'color_' in item:
-                    try:
-                        color = Color.objects.get(id=int(self.request.GET[item]))
-                        products = products.filter(color=color)
-                    except:
-                        pass
-
-        elif brand != 0:
-            brand = get_object_or_404(Brand.objects.all(), id=int(brand))
+        try:
+            brand = Brand.objects.get(id=int(brand))
             products.filter(product__brand=brand)
+        except:
+            pass
 
-        else:
-            products = []
+        for item in self.request.GET:
+            if 'atribut_' in item:
+                products = products.filter(option=int(self.request.GET[item]))
 
-        return products
+
+        for item in self.request.GET:
+            if 'color_' in item:
+                try:
+                    color = Color.objects.get(id=int(self.request.GET[item]))
+                    products = products.filter(color=color)
+                except:
+                    pass
+
+        
+        return [] if products == ProductVariants.objects.filter(product__status='Published') else products
 
 
 
