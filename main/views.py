@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, views, generics, mixins, status, filters
 from .models import Products, ProductVariants, Category, Color, Brand
-from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer, BrandSerializer
+from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer, BrandSerializer, ColorSerializer
 from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer, ProductVeriantRepresent
 from rest_framework.response import Response
 from django.db.models import Q
@@ -16,6 +16,12 @@ class CotalogPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = 'page_size'
     max_page_size = 20
+
+
+# colors 
+class ColorsView(generics.ListAPIView):
+    queryset = Color.objects.all()
+    serializer_class = ColorSerializer
 
 
 # popular products

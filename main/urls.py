@@ -22,5 +22,6 @@ urlpatterns = [
     path('comments', views.CommentsView.as_view()),
     path('brands', views.BrandList.as_view()),
     path('brands/<int:pk>', views.BrandDetailView.as_view()),
-    path('brand_ctg/<int:pk>', views.BrandCategoriew.as_view())
+    path('brand_ctg/<int:pk>', views.BrandCategoriew.as_view()),
+    path('colors', views.ColorsView.as_view())
 ]
