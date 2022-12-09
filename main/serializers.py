@@ -2,12 +2,12 @@ from rest_framework import serializers
 from .models import Products, ProductVariants, Category, ProductImages, Atributs, AtributOptions, Color, Comments
 import django_filters.rest_framework as filter
 from .filters import ProductVariantFilter
-#from easy_thumbnails_rest.serializers import ThumbnailerSerializer
+from easy_thumbnails_rest.serializers import ThumbnailerSerializer
  
 
 # for product img
 class ProductImageSerializer(serializers.ModelSerializer): 
-    #image = ThumbnailerSerializer(alias='product_img')
+    image = ThumbnailerSerializer(alias='product_img')
     class Meta:
         model = ProductImages
         fields = ['image']
