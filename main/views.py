@@ -32,13 +32,13 @@ class HitProductView(generics.ListAPIView):
 
 # popular categories
 class PopularCategoriesView(generics.ListAPIView):
-    queryset = Category.objects.filter(parent=None).filter(popular=True).exclude(brand=True)
+    queryset = Category.objects.filter(parent=None).filter(popular=True)
     serializer_class = CategorySerializer
     
 
 # brand view
 class PopularBrands(generics.ListAPIView):
-    queryset = Category.objects.filter(brand=True).filter(popular=True)[:12]
+    queryset = Category.objects.filter(popular=True)[:12]
     serializer_class = CartViewSerializer
 
 
@@ -50,7 +50,7 @@ class ProductsOfDay(generics.ListAPIView):
 
 # view for categories without parents
 class CategoryDeteilView(generics.RetrieveAPIView):
-    queryset = Category.objects.exclude(brand=True)
+    queryset = Category.objects.all()
     serializer_class = CtegoryDeteilSerializer
 
     def get(self, request, *args, **kwargs):
@@ -123,7 +123,7 @@ class ProductDetailView(generics.RetrieveAPIView):
 
 # for dropdown window with categories
 class GetCategories(generics.ListAPIView):
-    queryset = Category.objects.filter(parent=None).filter(brand=False)
+    queryset = Category.objects.filter(parent=None)
     serializer_class = AllCetegories
 
 
