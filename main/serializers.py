@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Products, ProductVariants, Category, ProductImages, Atributs, AtributOptions, Color, Comments
+from .models import Products, ProductVariants, Category, ProductImages, Atributs, AtributOptions, Color, Comments, Brand
 import django_filters.rest_framework as filter
 from .filters import ProductVariantFilter
 #from easy_thumbnails_rest.serializers import ThumbnailerSerializer
@@ -12,6 +12,13 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImages
         fields = ['image']
 
+
+
+# brand serializer
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = '__all__'
 
 # for color
 class ColorSerializer(serializers.ModelSerializer):
@@ -72,6 +79,15 @@ class ProductVariantSerializer(serializers.ModelSerializer):
         return data
 
 
+class ProductVeriantRepresent(serializers.Serializer):
+    def to_representation(self, instance):
+        data = instance.get_default()
+
+        serializer = ProductVariantSerializer(data).data
+
+        return serializer
+
+
 # for single category(used to show children categories)
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -102,15 +118,6 @@ class CategoryParentSerializer(serializers.Serializer):
         data['parent'] = CategoryParentSerializer(value.parent).data
 
         return data
-
-
-class ProductVeriantRepresent(serializers.Serializer):
-    def to_representation(self, instance):
-        data = instance.get_default()
-
-        serializer = ProductVariantSerializer(data).data
-
-        return serializer 
 
 
 

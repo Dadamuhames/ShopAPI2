@@ -59,6 +59,7 @@ class Category(models.Model):
 class Brand(models.Model):
     name = models.CharField('Name', max_length=255)
     popular = models.BooleanField('Popular', default=False)
+    image = ThumbnailerImageField(upload_to='brnad', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -90,7 +91,7 @@ class Products(models.Model):
     category = models.ManyToManyField(Category, related_name='products', blank=True)
     status = models.CharField('Status', max_length=255, choices=STATUS)
     colors = models.ManyToManyField(Color, blank=True, null=True)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True, related_name='products')
     model = models.CharField('Model', max_length=255)
     prod_of_day = models.BooleanField('Product of day', default=False)
     popular = models.BooleanField('Popular', default=False)

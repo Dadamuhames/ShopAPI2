@@ -19,5 +19,8 @@ urlpatterns = [
     path("filter", views.FilterApiView.as_view()),
     path("products", views.ProductsList.as_view()),
     path("matching", views.Matching.as_view()),
-    path('comments', views.CommentsView.as_view())
+    path('comments', views.CommentsView.as_view()),
+    path('brands', views.BrandList.as_view()),
+    path('brands/<int:pk>', views.BrandDetailView.as_view()),
+    path('brand_ctg/<int:pk>', views.BrandCategoriew.as_view())
 ]

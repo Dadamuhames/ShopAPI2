@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, views, generics, mixins, status, filters
 from .models import Products, ProductVariants, Category, Color, Brand
-from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer
+from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer, BrandSerializer
 from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer, ProductVeriantRepresent
 from rest_framework.response import Response
 from django.db.models import Q
@@ -39,7 +39,43 @@ class PopularCategoriesView(generics.ListAPIView):
 # brand view
 class PopularBrands(generics.ListAPIView):
     queryset = Brand.objects.filter(popular=True)[:12]
-    serializer_class = CartViewSerializer
+    serializer_class = BrandSerializer
+
+
+# brand list
+class BrandList(generics.ListAPIView):
+    queryset = Brand.objects.order_by('-id')
+    serializer_class = BrandSerializer
+    pagination_class = CotalogPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^name']
+
+
+# brand deteil view
+class BrandDetailView(generics.RetrieveAPIView):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+
+
+
+# get brand categories
+class BrandCategoriew(views.APIView):
+    def get(self, request, pk, format=None):
+        brand = get_object_or_404(Brand.objects.all(), pk=pk)
+        products = brand.products.all()
+
+        ctg = []
+        for prod in products:
+            try:
+                category = prod.category.get(children=None)
+                ctg.append(category)
+            except:
+                continue
+        print(ctg)
+        
+        serializer = CategorySerializer(ctg, many=True).data
+
+        return Response(serializer)
 
 
 # product of day
@@ -103,13 +139,28 @@ class ProductsList(generics.ListAPIView):
 
     def get_queryset(self):
         id = self.request.GET.get('category', 0)
+        brand = self.request.GET.get('brand', 0)
         products = ProductVariants.objects.filter(default=True).filter(product__status='Published')
 
         if id == '':
             id = 0
         
-        ctg = get_object_or_404(Category.objects.all(), id=int(id))
-        return products.filter(product__category=ctg)
+        if brand == '':
+            brand = 0
+        
+
+        if id != 0 and brand != 0:
+            brand = get_object_or_404(Brand.objects.all(), id=int(brand))
+            ctg = get_object_or_404(Category.objects.all(), id=int(id))
+            products.filter(product__category=ctg, product__brand=brand)
+        elif id != 0:
+            ctg = get_object_or_404(Category.objects.all(), id=int(id))
+            products.filter(product__category=ctg)
+        elif brand != 0:
+            brand = get_object_or_404(Brand.objects.all(), id=int(brand))
+            products.filter(product__brand=brand)
+
+        return products
 
 
 
