@@ -141,75 +141,32 @@ class FilterApiView(generics.ListAPIView):
 class ProductsList(generics.ListAPIView):
     serializer_class = ProductVariantSerializer
     pagination_class = CotalogPagination
-    filter_backends = [filter.DjangoFilterBackend]
-    filterset_class = ProductVariantFilter
+
 
     def get_queryset(self):
-        queryset = ProductVariants.objects.filter(product__status='Published')
-        ctg_id = self.request.GET.get('ctg_id')
-
-        if ctg_id == None or ctg_id == '':
-            return queryset
-
-        try:
-            ctg = Category.objects.get(id=int(ctg_id))
-        except:
-            return queryset
-
-        queryset = queryset.filter(product__category=ctg)
-        for item in self.request.GET:
-            if 'atribut_' in item:
-                queryset = queryset.filter(option=int(self.request.GET[item]))
-
-        for item in self.request.GET:
-            if 'color_' in item:
-                try:
-                    color = Color.objects.get(id=int(self.request.GET[item]))
-                    queryset = queryset.filter(color=color)
-                except:
-                    pass
-
-        return queryset
-
-'''    def get_queryset(self):
         id = self.request.GET.get('category', 0)
         brand = self.request.GET.get('brand', 0)
-        products = ProductVariants.objects.filter(product__status='Published')
+        products = ProductVariants.objects.filter(default=True).filter(product__status='Published')
 
         if id == '':
             id = 0
-
+        
         if brand == '':
             brand = 0
-
-        try:
-            ctg = Category.objects.get(id=int(id))
-            products.filter(product__category=ctg)
-        except:
-            pass
-
-
-        try:
-            brand = Brand.objects.get(id=int(brand))
-            products.filter(product__brand=brand)
-        except:
-            pass
-
-        for item in self.request.GET:
-            if 'atribut_' in item:
-                products = products.filter(option=int(self.request.GET[item]))
-
-
-        for item in self.request.GET:
-            if 'color_' in item:
-                try:
-                    color = Color.objects.get(id=int(self.request.GET[item]))
-                    products = products.filter(color=color)
-                except:
-                    pass
-
         
-        return [] if products == ProductVariants.objects.filter(product__status='Published') else products'''
+
+        if id != 0 and brand != 0:
+            brand = get_object_or_404(Brand.objects.all(), id=int(brand))
+            ctg = get_object_or_404(Category.objects.all(), id=int(id))
+            products.filter(product__category=ctg, product__brand=brand)
+        elif id != 0:
+            ctg = get_object_or_404(Category.objects.all(), id=int(id))
+            products.filter(product__category=ctg)
+        elif brand != 0:
+            brand = get_object_or_404(Brand.objects.all(), id=int(brand))
+            products.filter(product__brand=brand)
+
+        return products
 
 
 
