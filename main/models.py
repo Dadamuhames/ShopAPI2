@@ -83,7 +83,7 @@ class Products(models.Model):
     manufacturer = models.CharField('Manufacturer', max_length=255)
     model = models.CharField('Model', max_length=255)
     prod_of_day = models.BooleanField('Product of day', default=False)
-    #popular = models.BooleanField('Popular', default=False)
+    popular = models.BooleanField('Popular', default=False)
     hit = models.BooleanField("Is Hit Product", default=False)
 
 
