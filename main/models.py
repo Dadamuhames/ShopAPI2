@@ -56,6 +56,10 @@ class Category(models.Model):
 
         return ctg'''
 
+
+
+
+
     
 @receiver(post_save, sender=Category)
 def set_atributs(sender, instance, created, *args, **kwargs):

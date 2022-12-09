@@ -47,10 +47,10 @@ INSTALLED_APPS = [
     'rest_framework', 'rest_framework.authtoken',
     'account', 'order', 'colorfield',
     'ckeditor_uploader', 'ckeditor',
-    'django_filters',
+    'django_filters', 'easy_thumbnails_rest'
 ]
 
-#'easy_thumbnails_rest'
+#
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
