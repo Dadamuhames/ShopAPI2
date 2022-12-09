@@ -141,19 +141,20 @@ class FilterApiView(generics.ListAPIView):
 class ProductsList(generics.ListAPIView):
     serializer_class = ProductVariantSerializer
     pagination_class = CotalogPagination
-
+    filter_backends = [filter.DjangoFilterBackend]
+    pagination_class = CotalogPagination
+    filterset_class = ProductVariantFilter
 
     def get_queryset(self):
         id = self.request.GET.get('category', 0)
         brand = self.request.GET.get('brand', 0)
-        products = ProductVariants.objects.filter(default=True).filter(product__status='Published')
+        products = ProductVariants.objects.filter(product__status='Published')
 
         if id == '':
             id = 0
         
         if brand == '':
             brand = 0
-        
 
         if id != 0 and brand != 0:
             brand = get_object_or_404(Brand.objects.all(), id=int(brand))
@@ -162,6 +163,19 @@ class ProductsList(generics.ListAPIView):
         elif id != 0:
             ctg = get_object_or_404(Category.objects.all(), id=int(id))
             products.filter(product__category=ctg)
+
+            for item in self.request.GET:
+                if 'atribut_' in item:
+                    queryset = queryset.filter(option=int(self.request.GET[item]))
+
+            for item in self.request.GET:
+                if 'color_' in item:
+                    try:
+                        color = Color.objects.get(id=int(self.request.GET[item]))
+                        queryset = queryset.filter(color=color)
+                    except:
+                        pass
+
         elif brand != 0:
             brand = get_object_or_404(Brand.objects.all(), id=int(brand))
             products.filter(product__brand=brand)
