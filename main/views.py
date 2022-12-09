@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, views, generics, mixins, status, filters
-from .models import Products, ProductVariants, Category
+from .models import Products, ProductVariants, Category, Color
 from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer
 from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer, ProductVeriantRepresent
 from rest_framework.response import Response
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
-from .filters import ProductVariantFilter, ProductFilterBackend
+from .filters import ProductVariantFilter
 from django_filters import rest_framework as filter
 # Create your views here.
 
@@ -81,7 +81,16 @@ class FilterApiView(generics.ListAPIView):
         queryset = queryset.filter(product__category=ctg)
         for item in self.request.GET:
             if 'atribut_' in item:
-                queryset = queryset.filter(option=int(self.request.data[item]))
+                queryset = queryset.filter(option=int(self.request.GET[item]))
+
+        for item in self.request.GET:
+            if 'color_' in item:
+                try:
+                    color = Color.objects.get(id=int(self.request.GET[item]))
+                    queryset = queryset.filter(color=color)
+                except:
+                    pass
+            
 
         return queryset
 
