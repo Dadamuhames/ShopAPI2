@@ -20,8 +20,10 @@ class CotalogPagination(PageNumberPagination):
 
 # popular products
 class PopularProducts(generics.ListAPIView):
-    queryset = Products.objects.filter(status='Published').filter(popular=True)
+    queryset = Products.objects.filter(status='Published')
     serializer_class = ProductVeriantRepresent
+
+#.filter(popular=True)
 
 
 # hit products
