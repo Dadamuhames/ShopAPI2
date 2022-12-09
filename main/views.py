@@ -180,6 +180,9 @@ class ProductsList(generics.ListAPIView):
             brand = get_object_or_404(Brand.objects.all(), id=int(brand))
             products.filter(product__brand=brand)
 
+        else:
+            products = []
+
         return products
 
 
