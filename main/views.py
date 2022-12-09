@@ -123,13 +123,16 @@ class FilterApiView(generics.ListAPIView):
         queryset = queryset.filter(product__category=ctg)
         for item in self.request.GET:
             if 'atribut_' in item:
-                queryset = queryset.filter(option=int(self.request.GET[item]))
+                queryset = queryset.filter(options=int(self.request.GET[item]))
 
         for item in self.request.GET:
-            if 'color_' in item:
+            print(item)
+            if 'color_' in str(item):
                 try:
                     color = Color.objects.get(id=int(self.request.GET[item]))
+                    print(color)
                     queryset = queryset.filter(color=color)
+                    print(queryset)
                 except:
                     pass
             
