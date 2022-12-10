@@ -127,14 +127,9 @@ class FilterApiView(generics.ListAPIView):
                 options.append(self.request.GET[item])
 
         for product in queryset:
-            for opt in options:
-                try:
-                    option = AtributOptions.objects.get(id=int(opt))
-                    if option not in product.options.all():
-                        queryset = queryset.exclude(id=product.id)
-                except:
+            for option in product.options.all():
+                if options:
                     pass
-        
         
         colors = []
         for item in self.request.GET:
@@ -281,9 +276,15 @@ class AddToCart(views.APIView):
     def get(self, request, format=None):
         request.session['cart'] = request.session.get("cart", list())
 
+        if not request.session.session_key:
+            request.session.cycle_key()
+        sk = request.session.session_key
         print(request.session['cart'])
+
+
         data = {
-            'cart': request.session['cart']
+            'cart': request.session['cart'],
+            'session': sk
         }
 
         serializer = CartViewSerializer(data).data
