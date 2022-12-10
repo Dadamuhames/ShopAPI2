@@ -13,9 +13,9 @@ from django_filters import rest_framework as filter
 
 # paginators
 class CotalogPagination(PageNumberPagination):
-    page_size = 1
+    page_size = 20
     page_size_query_param = 'page_size'
-    max_page_size = 1
+    max_page_size = 20
 
 
 # colors 
@@ -110,9 +110,9 @@ class FilterApiView(generics.ListAPIView):
     def get_queryset(self):
         queryset = ProductVariants.objects.filter(product__status='Published')
         ctg_id = self.request.GET.get('ctg_id')
-
-        if ctg_id == None or ctg_id == '':
-            return queryset
+    
+        if ctg_id == None or ctg_id == '':          
+            return queryset                 
 
         try:
             ctg = Category.objects.get(id=int(ctg_id))
