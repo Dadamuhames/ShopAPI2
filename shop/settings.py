@@ -250,3 +250,4 @@ CACHES = {
 }
 
 
+SESSION_COOKIE_AGE = 10 * 60
