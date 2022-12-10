@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, views, generics, mixins, status, filters
-from .models import Products, ProductVariants, Category, Color, Brand
+from .models import Products, ProductVariants, Category, Color, Brand, AtributOptions
 from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer, BrandSerializer, ColorSerializer
 from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer, ProductVeriantRepresent
 from rest_framework.response import Response
@@ -128,8 +128,12 @@ class FilterApiView(generics.ListAPIView):
 
         for product in queryset:
             for opt in options:
-                if opt not in product.options.all():
-                    queryset = queryset.exclude(id=product.id)
+                try:
+                    option = AtributOptions.objects.get(id=int(opt))
+                    if option not in product.options.all():
+                        queryset = queryset.exclude(id=product.id)
+                except:
+                    pass
         
         
         colors = []
