@@ -121,23 +121,34 @@ class FilterApiView(generics.ListAPIView):
 
 
         queryset = queryset.filter(product__category=ctg)
+        products = []
+        options = []
         for item in self.request.GET:
             if 'atribut_' in item:
-                queryset = queryset.filter(options=int(self.request.GET[item]))
+                options.append(self.request.GET[item])
 
+        for product in queryset:
+            for opt in options:
+                if opt in product.options.all():
+                    products.append(products)
+        
+        
+        colors = []
         for item in self.request.GET:
-            print(item)
             if 'color_' in str(item):
                 try:
                     color = Color.objects.get(id=int(self.request.GET[item]))
-                    print(color)
-                    queryset = queryset.filter(color=color)
-                    print(queryset)
+                    colors.append(color)
                 except:
                     pass
+
+        
+        for product in products:
+            if products.color not in colors:
+                product.remove(product)
             
 
-        return queryset
+        return products
 
 
 # products list
@@ -239,16 +250,16 @@ class AddToCart(views.APIView):
         request.session['cart'] = request.session.get("cart", list())
 
         id = request.data.get("id")
-        variant = ProductVariants.objects.get(id=id)
         count = request.data.get('count')
 
-        if None in [variant, count]:
+        if None in [id, count]:
             return Response({'error': 'Fields is invalid'})
 
         
         if not str(id).isnumeric() or not str(count).isnumeric():
             return Response({'error': 'Fields is invalid'})
 
+        variant = ProductVariants.objects.get(id=id)
         price = str(float(variant.price) * int(count))
 
         if str(id) not in [str(it['variant']) for it in request.session['cart']]:
@@ -267,6 +278,7 @@ class AddToCart(views.APIView):
     def get(self, request, format=None):
         request.session['cart'] = request.session.get("cart", list())
 
+        print(request.session['cart'])
         data = {
             'cart': request.session['cart']
         }
