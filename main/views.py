@@ -126,10 +126,18 @@ class FilterApiView(generics.ListAPIView):
             if 'atribut_' in item:
                 options.append(self.request.GET[item])
 
+        products = []
         for product in queryset:
             for option in product.options.all():
-                if options:
-                    pass
+                if option in options:
+                    products.append(product)
+
+        
+        for product in queryset:
+            if product not in products:
+                queryset.exclude(id=product.id)
+
+
         
         colors = []
         for item in self.request.GET:
