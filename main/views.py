@@ -121,7 +121,6 @@ class FilterApiView(generics.ListAPIView):
 
 
         queryset = queryset.filter(product__category=ctg)
-        products = []
         options = []
         for item in self.request.GET:
             if 'atribut_' in item:
@@ -129,8 +128,8 @@ class FilterApiView(generics.ListAPIView):
 
         for product in queryset:
             for opt in options:
-                if opt in product.options.all():
-                    products.append(products)
+                if opt not in product.options.all():
+                    queryset = queryset.exclude(id=product.id)
         
         
         colors = []
@@ -143,12 +142,12 @@ class FilterApiView(generics.ListAPIView):
                     pass
 
         
-        for product in products:
-            if products.color not in colors:
-                product.remove(product)
+        for product in queryset:
+            if product.color not in colors:
+                queryset = queryset.exclude(id=product.id)
             
 
-        return products
+        return queryset
 
 
 # products list
