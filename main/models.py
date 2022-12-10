@@ -92,7 +92,6 @@ class Products(models.Model):
     status = models.CharField('Status', max_length=255, choices=STATUS)
     colors = models.ManyToManyField(Color, blank=True, null=True)
     model = models.CharField('Model', max_length=255)
-    prod_of_day = models.BooleanField('Product of day', default=False)
     popular = models.BooleanField('Popular', default=False)
     hit = models.BooleanField("Is Hit Product", default=False)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True, related_name='products')
@@ -113,6 +112,7 @@ class ProductVariants(models.Model):
     qty = models.PositiveIntegerField('Qty')
     rating = models.PositiveIntegerField('Rating', validators=[MaxValueValidator(5), MinValueValidator(1)], blank=True, null=True)
     options = models.ManyToManyField(AtributOptions, blank=True)
+    prod_of_day = models.BooleanField('Product of day', default=False)
 
     def __str__(self):
         return self.product.name + ': variant ' + str(self.id)
