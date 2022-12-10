@@ -283,13 +283,12 @@ class AddToCart(views.APIView):
 
 
         data = {
-            'cart': request.session['cart'],
             'session': sk
         }
 
-        serializer = CartViewSerializer(data).data
+        #serializer = CartViewSerializer(data).data
 
-        return Response(serializer)
+        return Response(data)
 
     # delete from cart
     def delete(self, request, format=None):
