@@ -274,12 +274,12 @@ class AddToCart(views.APIView):
 
     # cart view
     def get(self, request, format=None):
-        request.session['cart'] = request.session.get("cart", list())
+        self.request.session['cart'] = request.session.get("cart", list())
 
-        if not request.session.session_key:
-            request.session.cycle_key()
-        sk = request.session.session_key
-        print(request.session['cart'])
+        if not self.request.session.session_key:
+            self.request.session.cycle_key()
+        sk = self.request.session.session_key
+        print(self.request.session['cart'])
 
 
         data = {
