@@ -418,6 +418,23 @@ class CommentsView(generics.ListAPIView):
 
 
 
+# list serializer view
+class ListSerializeView(views.APIView):
+    def post(self, request, format=None):
+        lst = request.data.get('products', [])
+        products = []
+        
+        for it in lst:
+            try:
+                product = ProductVariants.objects.get(id=int(it))
+                products.append(product)
+            except:
+                pass
+
+        serializer = ProductVariantSerializer(products, many=True)
+
+        return Response(serializer.data)
+
 
 
         
