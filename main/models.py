@@ -113,6 +113,7 @@ class ProductVariants(models.Model):
     rating = models.PositiveIntegerField('Rating', validators=[MaxValueValidator(5), MinValueValidator(1)], blank=True, null=True)
     options = models.ManyToManyField(AtributOptions, blank=True)
     prod_of_day = models.BooleanField('Product of day', default=False)
+    matching = RichTextField()
 
     def __str__(self):
         return self.product.name + ': variant ' + str(self.id)
