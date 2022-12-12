@@ -18,6 +18,23 @@ class UserInformationSerializer(serializers.ModelSerializer):
         return user
 
 
+# user update serializer
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'username', 'last_name', 'nbm', 'email', 'state', 'city', 'post_ind', 'adres', 'code']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
+
+# user password serializer
+class PasswordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['password']
+
 
 
 

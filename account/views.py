@@ -1,11 +1,12 @@
 from rest_framework.authtoken.models import Token
 from django.shortcuts import render, redirect
 from rest_framework import views, viewsets, generics, status
-from .serializers import LoginSerializer, UserInformationSerializer
+from .serializers import LoginSerializer, UserInformationSerializer, PasswordSerializer, UserUpdateSerializer
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import User
 import random
 import datetime
@@ -108,7 +109,48 @@ class ProfileView(views.APIView):
 
 
 
+
+# update profile
+class UpdateUSerProfileView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserUpdateSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
+    def partial_update(self, request, *args, **kwargs):
+        if request.data.get("password") == request.data.get("password2") and  request.data.get('password') is not None:
+            request.user.set_password(request.data.get("password"))
+            request.user.save()
+        elif request.data.get('password') != request.data.get('password2'):
+            return Response({'error': 'Passwords  is invalid'})
+
+
+        return super().partial_update(request, *args, **kwargs)
+
+
 # Sing Up
 class SingUpView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserInformationSerializer
+
+
+
+# set password
+class UpdatePassword(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PasswordSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def partial_update(self, request, *args, **kwargs):
+        if request.data.get("password") == request.data.get("password2") and request.data.get('password') is not None:
+            request.user.set_password(request.data.get("password"))
+            request.user.save()
+        elif request.data.get('password') != request.data.get('password2'):
+            return Response({'error': 'Passwords  is invalid'})
+
+
+        return Response(UserInformationSerializer(request.user).data)
