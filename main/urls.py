@@ -12,8 +12,6 @@ urlpatterns = [
     path('product/<int:pk>', views.ProductDetailView.as_view()),
     path("categories", views.GetCategories.as_view()),
     path('get_list', views.ListSerializeView.as_view()),
-    path('get_modal/<int:pk>', views.GetModalData.as_view()),
-    path("change-count", views.ChangeCount.as_view()),
     path('search', views.SearchView.as_view()),
     path("filter", views.FilterApiView.as_view()),
     path("products", views.ProductsList.as_view()),

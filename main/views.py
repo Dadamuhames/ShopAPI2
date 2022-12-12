@@ -204,43 +204,12 @@ class GetCategories(generics.ListAPIView):
     serializer_class = AllCetegories
 
 
-# product variant for modal
-class GetModalData(generics.RetrieveAPIView):
-    queryset = ProductVariants.objects.filter(Q(product__status='Published'))
-    serializer_class = ProductVariantSerializer
-
-
-# change count in cart
-class ChangeCount(views.APIView):
-    def put(self, request, format=None):
-        if request.session.get("cart") is None:
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
-        id = str(request.data.get("id"))
-        type = request.data.get("type")
-
-        if id is None or id not in [str(it['variant']) for it in request.session['cart']]:
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
-        
-        for it in request.session['cart']:
-            if str(id) == str(it['variant']):
-                if type == '_up':
-                    it['count'] = str(int(it['count']) + 1)
-                elif type == '_down':
-                    it['count'] = str(int(it['count']) - 1)
-
-                request.session.modified = True
-        
-        return Response(list(request.session['cart']), status=status.HTTP_200_OK)
-
-
 # search
 class SearchView(generics.ListAPIView):
     queryset = ProductVariants.objects.filter(product__status='Published').filter(default=True)
     serializer_class = ProductVariantSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['$product__name', '$product__manufacturer', '$product__model']
+    search_fields = ['$product__name', '$product__brand__name', '$product__model']
     pagination_class = CotalogPagination
 
 
