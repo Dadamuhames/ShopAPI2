@@ -19,5 +19,6 @@ urlpatterns = [
     path('brands', views.BrandList.as_view()),
     path('brands/<int:pk>', views.BrandDetailView.as_view()),
     path('brand_ctg/<int:pk>', views.BrandCategoriew.as_view()),
-    path('colors', views.ColorsView.as_view())
+    path('colors', views.ColorsView.as_view()),
+    path('test', views.TesTSession.as_view())
 ]

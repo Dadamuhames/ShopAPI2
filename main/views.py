@@ -250,6 +250,13 @@ class ListSerializeView(views.APIView):
 
 
 
-        
+# test session
+class TesTSession(views.APIView):
+    def get(self, request, format=None):
+        if not self.request.session.session_key:
+            self.request.session.cycle_key()
+        sk = self.request.session.session_key
+
+        return Response({'session': sk})
 
         
