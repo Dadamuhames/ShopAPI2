@@ -12,5 +12,6 @@ urlpatterns = [
     path("sing-up", views.SingUpView.as_view()),
     path('code_validate', views.CodeValidate.as_view()),
     path("update_profile", views.UpdateUSerProfileView.as_view()),
-    path("update_password", views.UpdatePassword.as_view())
+    path("update_password", views.UpdatePassword.as_view()),
+    path("set_code", views.ChangeUser.as_view())
 ]

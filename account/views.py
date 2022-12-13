@@ -1,5 +1,5 @@
 from rest_framework.authtoken.models import Token
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import views, viewsets, generics, status
 from .serializers import LoginSerializer, UserInformationSerializer, PasswordSerializer, UserUpdateSerializer
 from rest_framework.response import Response
@@ -83,19 +83,20 @@ class CodeValidate(views.APIView):
 
 
 # verify with code
-# !!! THIS CLASS IS INVALID AND SHOULD BE REWRITED
-class GetUser(views.APIView):
+# set code as user password
+class ChangeUser(views.APIView):
     def post(self, request, format=None):
-        if request.session.get("verify", {}).get('user') is None:
-            return Response({'error': 'verify code is none'})
+        nbm = request.POST.get('nbm')
+        user = get_object_or_404(User.objects.filter(is_active=True), nbm=nbm)
 
-        id = request.session['verify'].get('user')
-        user = User.objects.get(id=int(id))
+        if request.data.get("password"):
+            user.set_password(request.data.get("password"))
+            user.save()
+        else:
+            return Response({'error': 'Passwords  is invalid'})
 
-        login(request, user)
 
-
-        print(user.password)
+        return Response(UserInformationSerializer(request.user).data)
     
 
 
