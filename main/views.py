@@ -213,7 +213,7 @@ class ProductsView(generics.ListAPIView):
             queryset = queryset.filter(product__category=category)
         except:
             if brand_id == 0:
-                return Response({'error': 'category is required'})
+                return ProductVariants.objects.filter(id=0)
 
 
         if brand_id == '':
