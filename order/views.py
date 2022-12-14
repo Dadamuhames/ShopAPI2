@@ -1,37 +1,42 @@
 from django.shortcuts import render
-from rest_framework import views, viewsets, generics, status, mixins
+from rest_framework import views, viewsets, generics, status, mixins, permissions
 from .serializers import OrderSerializer, PaymentTypeSerializer
 from main.serializers import CartViewSerializer
 from rest_framework.response import Response
 from .models import Order, OrderData, OrderHistory, OrderProducts, PaymentTyps
 from rest_framework.permissions import IsAuthenticated
 from main.models import ProductVariants
+from .filters import OrderFilter
+from django_filters import rest_framework as filter
+from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
 
-class OrderCreateView(generics.ListCreateAPIView, mixins.RetrieveModelMixin):
+# paginators
+class BasePagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
+
+class OrderCreateView(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
-    permission_classes = []
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filter.DjangoFilterBackend]
+    filterset_class = OrderFilter
+    pagination_class = BasePagination
     
 
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-            orders = Order.objects.filter(user=self.request.user).exclude(status='Canseled')
-        else:
-            if not self.request.session.session_key:
-                self.request.session.cycle_key()
-            sk = self.request.session.session_key
-            orders = Order.objects.filter(session=sk)
-
+        orders = Order.objects.filter(user=self.request.user).exclude(status='Canseled')
         return orders
-    
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         order = serializer.save()
-        
         if self.request.user.is_authenticated:
             order.user = self.request.user
         else:

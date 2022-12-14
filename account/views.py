@@ -12,6 +12,31 @@ import random
 import datetime
 from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
 from django.core.cache import cache
+import string, random
+from rest_framework_simplejwt.tokens import RefreshToken
+
+
+# generate password
+def generate_pass():
+    password = ''
+
+    pass_len = random.randint(8, 20)
+    alf_count = random.randint(pass_len//4, pass_len//2)
+    nbm_count = pass_len - alf_count
+
+    alf = string.ascii_uppercase
+    nbm = string.digits
+
+    for _ in range(alf_count):
+        password += random.choice(alf)
+
+    for _ in range(nbm_count):
+        password += random.choice(nbm)
+
+    password = list(password)
+    random.shuffle(password)
+
+    return ''.join(password)
 
 # Check number
 class CheckNubmer(views.APIView):
@@ -46,28 +71,35 @@ class SendSms(views.APIView):
         code = 666666
         cache.set(nbm, {
             'code': str(code),
-            'counter': 1
-        }, 5 * 60)
+        }, 60)
+        cache.set(f'counter_{nbm}', 0, 60)
 
 
         print(nbm, code)
 
-        return Response(cache.get(str(self.request.session.session_key)))
+        return Response(cache.get(nbm))
 
 
 # check code
 class CodeValidate(views.APIView):
     def post(self, request, format=None):
-        if not self.request.session.session_key:
-            return Response({'error': 'cashe is clean'})
+        nbm = request.data.get("nbm")
 
-        my_cache = cache.get(str(self.request.session.session_key), {})
+        if cache.get(f'counter_{nbm}', 5) >= 5:
+            cache.delete_many([nbm, f'counter_{nbm}'])
+        
+        my_cache = cache.get(nbm, {})
+        try:
+            cache.incr(f'counter_{nbm}', 1)
+        except:
+            pass
+
         code = request.data.get("code")
         in_cache_code = my_cache.get('code')
 
 
         if code is None or  in_cache_code is None:
-            return Response({'error': 'Code is requiered'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'Code is invalid'}, status=status.HTTP_403_FORBIDDEN)
 
 
         _bool = code == in_cache_code
@@ -136,6 +168,15 @@ class UpdateUSerProfileView(generics.UpdateAPIView):
 class SingUpView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserInformationSerializer
+
+
+    def perform_create(self, serializer):
+        password = generate_pass()
+        serializer.validated_data['password'] = password
+        user = serializer.save()
+        cache.set(serializer.validated_data.get('nbm'), password)
+
+        return user
 
 
 
