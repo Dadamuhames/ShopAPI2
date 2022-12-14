@@ -189,6 +189,78 @@ class ProductsList(generics.ListAPIView):
         return products
 
 
+#product list new
+class ProductsView(generics.ListAPIView):
+    serializer_class = ProductVariantSerializer
+    pagination_class = CotalogPagination
+    filter_backends = [filter.DjangoFilterBackend]
+    filterset_class = ProductVariantFilter
+
+    def get_queryset(self):   
+        if 'filter' in self.request.GET:
+            queryset = ProductVariants.objects.all()
+        else:
+            queryset = ProductVariants.objects.filter(default=True)
+
+        ctg_id = self.request.GET.get("category", 0)
+        brand_id = self.request.GET.get("brand", 0)
+
+        if ctg_id == '':
+            ctg_id = 0
+
+        try:
+            category = Category.objects.get(id=ctg_id)
+            queryset = queryset.filter(product__category=category)
+        except:
+            if brand_id == 0:
+                return Response({'error': 'category is required'})
+
+
+        if brand_id == '':
+            brand_id = 0
+
+
+        try:
+            brand = Brand.objects.get(id=brand_id)
+            queryset = queryset.filter(product_brand=brand)
+        except:
+            pass
+
+
+        options = []
+        for item in self.request.GET:
+            if 'atribut_' in item:
+                options.append(self.request.GET[item])
+
+        products = []
+        for product in queryset:
+            for option in product.options.all():
+                if option in options:
+                    products.append(product)
+
+        for product in queryset:
+            if product not in products:
+                queryset.exclude(id=product.id)
+
+        colors = []
+        for item in self.request.GET:
+            if 'color_' in str(item):
+                try:
+                    color = Color.objects.get(id=int(self.request.GET[item]))
+                    colors.append(color)
+                except:
+                    pass
+
+        for product in queryset:
+            if product.color not in colors:
+                queryset = queryset.exclude(id=product.id)
+
+
+
+
+
+        return queryset
+
 
 
 # product-variant detail view

@@ -14,7 +14,7 @@ urlpatterns = [
     path('get_list', views.ListSerializeView.as_view()),
     path('search', views.SearchView.as_view()),
     path("filter", views.FilterApiView.as_view()),
-    path("products", views.ProductsList.as_view()),
+    path("products", views.ProductsView.as_view()),
     path('comments', views.CommentsView.as_view()),
     path('brands', views.BrandList.as_view()),
     path('brands/<int:pk>', views.BrandDetailView.as_view()),

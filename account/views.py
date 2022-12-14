@@ -44,8 +44,9 @@ class SendSms(views.APIView):
             self.request.session.cycle_key()
         
         code = 666666
-        cache.set(str(self.request.session.session_key), {
-            'code': str(code)
+        cache.set(nbm, {
+            'code': str(code),
+            'counter': 1
         }, 5 * 60)
 
 
