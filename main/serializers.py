@@ -69,6 +69,7 @@ class ProductVariantSerializer(serializers.ModelSerializer):
         data['img_first'] = ProductImageSerializer(instance.images.first()).data
 
         data['atributs'] = []
+        data['quantity'] = 1
         
         for opt in instance.options.all():
             atribut = opt.atribut
