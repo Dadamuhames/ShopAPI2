@@ -202,7 +202,9 @@ class ProductsView(generics.ListAPIView):
         else:
             queryset = ProductVariants.objects.filter(default=True)
 
+        print(queryset)
         ctg_id = self.request.GET.get("category", 0)
+        print(ctg_id)
         brand_id = self.request.GET.get("brand", 0)
 
         if ctg_id == '':
