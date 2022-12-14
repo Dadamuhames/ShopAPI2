@@ -209,7 +209,7 @@ class ProductsView(generics.ListAPIView):
             ctg_id = 0
 
         try:
-            category = Category.objects.get(id=ctg_id)
+            category = Category.objects.get(id=int(ctg_id))
             queryset = queryset.filter(product__category=category)
         except:
             if brand_id == 0:
