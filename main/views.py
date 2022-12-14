@@ -217,7 +217,7 @@ class ProductsView(generics.ListAPIView):
             if brand_id == 0:
                 return ProductVariants.objects.filter(id=0)
 
-
+        print(queryset)
         if brand_id == '':
             brand_id = 0
 
@@ -234,15 +234,16 @@ class ProductsView(generics.ListAPIView):
             if 'atribut_' in item:
                 options.append(self.request.GET[item])
 
-        products = []
-        for product in queryset:
-            for option in product.options.all():
-                if option in options:
-                    products.append(product)
+        if len(options) > 0:
+            products = []
+            for product in queryset:
+                for option in product.options.all():
+                    if option in options:
+                        products.append(product)
 
-        for product in queryset:
-            if product not in products:
-                queryset.exclude(id=product.id)
+            for product in queryset:
+                if product not in products:
+                    queryset.exclude(id=product.id)
 
         colors = []
         for item in self.request.GET:
@@ -252,10 +253,10 @@ class ProductsView(generics.ListAPIView):
                     colors.append(color)
                 except:
                     pass
-
-        for product in queryset:
-            if product.color not in colors:
-                queryset = queryset.exclude(id=product.id)
+        if len(colors) > 0:
+            for product in queryset:
+                if product.color not in colors:
+                    queryset = queryset.exclude(id=product.id)
 
 
 
