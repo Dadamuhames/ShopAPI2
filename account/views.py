@@ -173,11 +173,13 @@ class SingUpView(generics.CreateAPIView):
     def perform_create(self, serializer):
         password = generate_pass()
         serializer.validated_data['password'] = password
+        print(password)
         user = serializer.save()
         cache.set(serializer.validated_data.get('nbm'), password)
-
+        
         return user
 
+    
 
 
 # set password

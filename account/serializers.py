@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, telephone_validator
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # login serializer
 class LoginSerializer(serializers.Serializer):
@@ -16,7 +17,21 @@ class UserInformationSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
+        print(user)
+        
         return user
+
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        token = RefreshToken.for_user(instance)
+
+        data['token'] = {
+            'refresh': str(token),
+            'access': str(token.access_token)
+        }
+        
+        return data
 
 
 # user update serializer

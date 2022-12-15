@@ -66,8 +66,6 @@ class ProductVariantSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
 
-        data['img_first'] = ProductImageSerializer(instance.images.first()).data
-
         data['atributs'] = []
         data['quantity'] = 1
         
