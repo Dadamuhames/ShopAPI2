@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework', 'rest_framework.authtoken',
     'account', 'order', 'colorfield',
     'ckeditor_uploader', 'ckeditor',
-    'django_filters'
+    'django_filters', 'osm_field'
 ]
 
 #
@@ -251,3 +251,9 @@ CACHES = {
 
 
 SESSION_COOKIE_AGE = 10 * 60
+
+
+
+# for sms
+YOUR_ACCOUNT_SID = 'OR172b4841bd001fbcbda14e34de1346af'
+YOUR_AUTH_TOKEN = ''
