@@ -8,6 +8,7 @@ from django.forms.fields import FilePathField
 
 # for product img
 class ProductImageSerializer(serializers.ModelSerializer): 
+    #image = ThumbnailerSerializer(alias='product_img')
     class Meta:
         model = ProductImages
         fields = ['image']
@@ -84,6 +85,7 @@ class ProductVeriantRepresent(serializers.Serializer):
         data = instance.get_default()
 
         serializer = ProductVariantSerializer(data, read_only=True).data
+        print(serializer)
 
         return serializer
 
