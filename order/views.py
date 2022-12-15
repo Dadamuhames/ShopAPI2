@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from rest_framework import views, viewsets, generics, status, mixins, permissions
-from .serializers import OrderSerializer, PaymentTypeSerializer
+from .serializers import OrderSerializer, PaymentTypeSerializer, StateSerializer, CitySerializer
 from main.serializers import CartViewSerializer
 from rest_framework.response import Response
-from .models import Order, OrderData, OrderHistory, OrderProducts, PaymentTyps
+from .models import Order, OrderData, OrderHistory, OrderProducts, PaymentTyps, State, City
 from rest_framework.permissions import IsAuthenticated
 from main.models import ProductVariants
 from .filters import OrderFilter
@@ -81,8 +81,16 @@ class PaymentTypeView(generics.ListAPIView):
     serializer_class = PaymentTypeSerializer
 
 
-# payment order detail view
-#class OrderDetailView(generics.RetrieveAPIView):
+# get states
+class StatesView(generics.ListAPIView):
+    queryset = State.objects.all()
+    serializer_class = StateSerializer
+
+
+# get cities
+class CityView(generics.ListAPIView):
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
     
 
 

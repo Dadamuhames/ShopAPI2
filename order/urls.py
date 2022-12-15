@@ -5,4 +5,6 @@ from . import views
 urlpatterns = [
     path('orders', views.OrderCreateView.as_view()),
     path('payments', views.PaymentTypeView.as_view()),
+    path('get_cities', views.CityView.as_view()),
+    path("get_states", views.StatesView.as_view())
 ]
