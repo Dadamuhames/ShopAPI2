@@ -30,6 +30,10 @@ class OrderCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         orders = Order.objects.filter(user=self.request.user).exclude(status='Canseled')
+        if self.request.GET.get('status') is not None:
+            status = self.request.GET.get('status')
+            orders = Order.objects.filter(status=status)
+
         return orders
 
     def get(self, request, *args, **kwargs):
