@@ -1,4 +1,4 @@
-from osm_field.fields import LatitudeField, LongitudeField, OSMField
+#from osm_field.fields import LatitudeField, LongitudeField, OSMField
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
@@ -81,9 +81,9 @@ class Order(models.Model):
     date = models.DateTimeField('Date', default=datetime.datetime.now())
     update_date = models.DateTimeField("Update Date", default=datetime.datetime.now())
     shipping = models.CharField('Shipping type', max_length=255, choices=SHIP_TYPE)
-    location = OSMField()
+    '''    location = OSMField()
     location_lat = LatitudeField()
-    location_lon = LongitudeField()
+    location_lon = LongitudeField()'''
 
 
     def get_full_name(self):
