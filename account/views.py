@@ -14,7 +14,7 @@ from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
 from django.core.cache import cache
 import string, random
 from rest_framework_simplejwt.tokens import RefreshToken
-from twilio.rest import Client
+#from twilio.rest import Client
 
 # generate password
 def generate_pass():
