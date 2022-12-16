@@ -117,18 +117,15 @@ class CodeValidate(views.APIView):
 
 # verify with code
 # set code as user password
-class ChangeUser(views.APIView):
+class ResetPassword(views.APIView):
     def post(self, request, format=None):
         nbm = request.POST.get('nbm')
         user = get_object_or_404(User.objects.filter(is_active=True), nbm=nbm)
 
-        if request.data.get("password"):
-            password = generate_pass()
-            user.set_password()
-            user.save()
-        else:
-            return Response({'error': 'Passwords  is invalid'})
-
+        password = generate_pass()
+        print(password)
+        user.set_password(password)
+        user.save()
 
         return Response(UserInformationSerializer(request.user).data)
     
@@ -153,11 +150,9 @@ class UpdateUSerProfileView(generics.UpdateAPIView):
     def get_object(self):
         return self.request.user
 
-
     def partial_update(self, request, *args, **kwargs):
         if request.data.get("password") == request.data.get("password2") and  request.data.get('password') is not None:
             request.user.set_password(request.data.get("password"))
-            
             request.user.save()
         elif request.data.get('password') != request.data.get('password2'):
             return Response({'error': 'Passwords  is invalid'})

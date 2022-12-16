@@ -30,7 +30,6 @@ class User(AbstractUser):
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='users', blank=True, null=True)
     post_ind = models.CharField('Post Index', max_length=6, blank=True, null=True)
     code = models.CharField('Verify code', max_length=6, blank=True, null=True)
-    password_verify = models.BooleanField('Password verify', default=False)
 
     USERNAME_FIELD = 'nbm'
 
