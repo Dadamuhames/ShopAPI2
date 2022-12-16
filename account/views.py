@@ -123,7 +123,8 @@ class ChangeUser(views.APIView):
         user = get_object_or_404(User.objects.filter(is_active=True), nbm=nbm)
 
         if request.data.get("password"):
-            user.set_password(request.data.get("password"))
+            password = generate_pass()
+            user.set_password()
             user.save()
         else:
             return Response({'error': 'Passwords  is invalid'})
@@ -156,6 +157,7 @@ class UpdateUSerProfileView(generics.UpdateAPIView):
     def partial_update(self, request, *args, **kwargs):
         if request.data.get("password") == request.data.get("password2") and  request.data.get('password') is not None:
             request.user.set_password(request.data.get("password"))
+            
             request.user.save()
         elif request.data.get('password') != request.data.get('password2'):
             return Response({'error': 'Passwords  is invalid'})
