@@ -53,12 +53,11 @@ class OrderCreateView(generics.ListCreateAPIView):
         # may be another name
         # get products part
         lst = self.request.data.get('products')
-
+        total = 0
         for it in lst:
-            pass
-
             product = ProductVariants.objects.get(id=int(it['id']))
             price = product.price * int(it['count'])
+            total += price
 
             OrderProducts.objects.create(
                 order = order,
@@ -66,6 +65,9 @@ class OrderCreateView(generics.ListCreateAPIView):
                 price = price,
                 qty = int(it['count'])
             )
+
+        order.price = total
+        order.save()
 
 
 
