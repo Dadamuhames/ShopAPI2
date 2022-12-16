@@ -155,6 +155,7 @@ class ProductVeriantDetailSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         atributs = instance.product.category.get(children=None).atributs.all()
         data['atributs'] = []
+        data['quentity'] = 1
 
         for atr in atributs:
             atr_data = AtributSerializer(atr).data
