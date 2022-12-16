@@ -7,7 +7,7 @@ from main.serializers import ReqursiveCategorySerializer
 
 # order products serializer
 class OrderProductsSerializer(serializers.ModelSerializer):
-    product = ProductVariantSerializer(many=True, read_only=True)
+    product = ProductVariantSerializer(read_only=True)
 
     class Meta:
         model = OrderProducts
