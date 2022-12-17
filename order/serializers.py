@@ -55,8 +55,9 @@ class PaymentTypeSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     products = OrderProductsSerializer(many=True, read_only=True)
     data = OrderDataSerializer(many=True, read_only=True)
-    #state = StateSerializer(read_only=True)
-    #city = CitySerializer(read_only=True)
+    state = serializers.ReadOnlyField(source='state.name')
+    city = serializers.ReadOnlyField(source='city.name')
+    payment = serializers.ReadOnlyField(source='payment.name')
     history = HistorySerializer(many=True, read_only=True)
     user = serializers.ReadOnlyField(source='user.username')
 
