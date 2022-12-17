@@ -72,7 +72,7 @@ class Order(models.Model):
     adres = models.CharField('Adres', max_length=255, blank=True, null=True)
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='orders', blank=True, null=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='orders', blank=True, null=True)
-    status = models.CharField('Status', max_length=255, default='Accepted', choices=STATUS)
+    status = models.CharField('Status', max_length=255, default='Ожидание', choices=STATUS)
     tel = models.CharField('Tel. number', max_length=13, validators=[telephone_validator])
     promocode = models.ForeignKey(Promocode, on_delete=models.SET_NULL, null=True, blank=True)
     email = models.EmailField('Email', blank=True, null=True)
