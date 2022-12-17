@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import views, viewsets, generics, status, mixins, permissions
-from .serializers import OrderSerializer, PaymentTypeSerializer, StateSerializer, CitySerializer
+from .serializers import OrderSerializer, PaymentTypeSerializer, StateSerializer, CitySerializer, OrdersDetailSerializer
 from main.serializers import CartViewSerializer
 from rest_framework.response import Response
 from .models import Order, OrderData, OrderHistory, OrderProducts, PaymentTyps, State, City
@@ -23,7 +23,7 @@ class BasePagination(PageNumberPagination):
 
 # orders list
 class MyOrders(generics.ListAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrdersDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filter.DjangoFilterBackend]
     filterset_class = OrderFilter
