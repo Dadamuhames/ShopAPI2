@@ -20,16 +20,18 @@ class BasePagination(PageNumberPagination):
 
 
 
-class OrderCreateView(generics.ListCreateAPIView):
+
+# orders list
+class MyOrders(generics.ListAPIView):
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filter.DjangoFilterBackend]
     filterset_class = OrderFilter
     pagination_class = BasePagination
-    
 
     def get_queryset(self):
-        orders = Order.objects.filter(user=self.request.user).exclude(status='Canseled')
+        orders = Order.objects.filter(
+            user=self.request.user).exclude(status='Canseled')
         if self.request.GET.get('status') is not None:
             status = self.request.GET.get('status')
             orders = Order.objects.filter(status=status)
@@ -38,6 +40,15 @@ class OrderCreateView(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+# create order
+class OrderCreateView(generics.CreateAPIView):
+    serializer_class = OrderSerializer
+    filter_backends = [filter.DjangoFilterBackend]
+    filterset_class = OrderFilter
+    pagination_class = BasePagination
+    
 
     def perform_create(self, serializer):
         order = serializer.save()
