@@ -69,7 +69,7 @@ class Order(models.Model):
     first_name = models.CharField('First Name', max_length=255)
     last_name = models.CharField('Last Name', max_length=255)
     patronymic = models.CharField('Patronymic', max_length=255)
-    adres = models.CharField('Adres', max_length=255)
+    adres = models.CharField('Adres', max_length=255, blank=True, null=True)
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='orders', blank=True, null=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='orders', blank=True, null=True)
     status = models.CharField('Status', max_length=255, default='Accepted', choices=STATUS)
