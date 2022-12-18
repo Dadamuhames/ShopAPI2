@@ -142,7 +142,7 @@ class Comments(models.Model):
     product = models.ForeignKey(ProductVariants, on_delete=models.CASCADE, related_name='comments')
     rating = models.PositiveIntegerField('Rating', validators=[MaxValueValidator(5), MinValueValidator(1)])
     body = models.TextField('Comment Body')
-    status = models.CharField("Status", max_length=255 , choices=STATUS)
+    status = models.CharField("Status", max_length=255 , choices=STATUS, default='Inactive')
     date = models.DateTimeField('Date')
 
     def __str__(self):

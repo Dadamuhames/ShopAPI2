@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import viewsets, views, generics, mixins, status, filters
-from .models import Products, ProductVariants, Category, Color, Brand, AtributOptions
+from rest_framework import viewsets, views, generics, mixins, status, filters, permissions
+from .models import Products, ProductVariants, Category, Color, Brand, AtributOptions, Comments
 from .serializers import CtegoryDeteilSerializer, ProductVeriantDetailSerializer, AllCetegories, CommentsSerializer, BrandSerializer, ColorSerializer
 from .serializers import CartViewSerializer, WishlistSerializer, ProductVariantSerializer, CategorySerializer, ProductVeriantRepresent
 from rest_framework.response import Response
@@ -333,5 +333,13 @@ class TesTSession(views.APIView):
         sk = self.request.session.session_key
 
         return Response({'session': sk})
+
+        
+# add comment
+class AddComment(generics.CreateAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentsSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
 
         

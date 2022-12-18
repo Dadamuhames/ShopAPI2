@@ -138,7 +138,7 @@ class CtegoryDeteilSerializer(serializers.ModelSerializer):
 class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
-        exclude = ['product']
+        fields = '__all__'
 
 
 
