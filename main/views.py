@@ -340,6 +340,13 @@ class AddComment(generics.CreateAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentsSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    
+    def perform_create(self, serializer):
+        comment = serializer.save()
+        comment.user = self.request.user
+        comment.save()
 
+        return comment
 
         

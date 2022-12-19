@@ -138,7 +138,7 @@ class ProductImages(models.Model):
 class Comments(models.Model):
     STATUS = [('Inactive', 'Inactive'), ('Published', 'Published')]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', blank=True, null=True)
     product = models.ForeignKey(ProductVariants, on_delete=models.CASCADE, related_name='comments')
     rating = models.PositiveIntegerField('Rating', validators=[MaxValueValidator(5), MinValueValidator(1)])
     body = models.TextField('Comment Body')
