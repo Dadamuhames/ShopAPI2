@@ -146,7 +146,7 @@ class Comments(models.Model):
     date = models.DateTimeField('Date', blank=True, null=True)
 
     def __str__(self):
-        return self.user.username + " | " + self.body
+        return self.user.nbm + " | " + self.body
 
     def save(self, *args, **kwargs):
         super(Comments, self).save(*args, **kwargs)
