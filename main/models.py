@@ -143,7 +143,7 @@ class Comments(models.Model):
     rating = models.PositiveIntegerField('Rating', validators=[MaxValueValidator(5), MinValueValidator(1)])
     body = models.TextField('Comment Body')
     status = models.CharField("Status", max_length=255 , choices=STATUS, default='Inactive')
-    date = models.DateTimeField('Date')
+    date = models.DateTimeField('Date', blank=True, null=True)
 
     def __str__(self):
         return self.user.username + " | " + self.body

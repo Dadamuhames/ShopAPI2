@@ -8,6 +8,7 @@ from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from .filters import ProductVariantFilter
 from django_filters import rest_framework as filter
+import datetime
 # Create your views here.
 
 
@@ -344,6 +345,7 @@ class AddComment(generics.CreateAPIView):
     
     def perform_create(self, serializer):
         comment = serializer.save()
+        comment.date = str(datetime.datetime.now())
         comment.user = self.request.user
         comment.save()
 
