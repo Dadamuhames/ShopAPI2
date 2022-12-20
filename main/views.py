@@ -117,7 +117,7 @@ class FilterApiView(generics.ListAPIView):
             query = None
 
         if query:
-            queryset.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(option__name__iregex=query)) 
+            queryset = queryset.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(option__name__iregex=query)) 
 
     
         if ctg_id == None or ctg_id == '':          
