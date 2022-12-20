@@ -174,19 +174,19 @@ class ProductsView(generics.ListAPIView):
     filterset_class = ProductVariantFilter
 
     def get_queryset(self):   
-        if 'filter' in self.request.GET:
+        if 'filter' in self.request.GET or 'query' in self.request.GET:
             queryset = ProductVariants.objects.all()
+            query = self.request.GET.get("query")
+            
+            if query == '':
+                query = None
+
+            if query:
+                queryset = queryset.filter(Q(product__name__iregex=query) | Q(
+                    color__name__iregex=query) | Q(options__name__iregex=query))
+                    
         else:
             queryset = ProductVariants.objects.filter(default=True)
-
-        query = self.request.GET.get("query")
-
-        if query == '':
-            query = None
-
-        if query:
-            queryset = queryset.filter(Q(product__name__iregex=query) | Q(
-                color__name__iregex=query) | Q(options__name__iregex=query))
 
         print(queryset)
         ctg_id = self.request.GET.get("category", 0)
