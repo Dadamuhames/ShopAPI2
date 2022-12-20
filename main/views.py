@@ -243,7 +243,7 @@ class ProductsView(generics.ListAPIView):
         
         if query:
             queryset = queryset.filter(Q(product__name__iregex=query) | Q(
-                color__name__iregex=query) | Q(option__name__iregex=query))
+                color__name__iregex=query) | Q(options__name__iregex=query))
         print(query)
 
 
