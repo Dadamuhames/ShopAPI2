@@ -115,10 +115,6 @@ class FilterApiView(generics.ListAPIView):
 
         if query == '':
             query = None
-
-        if query:
-            queryset = queryset.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(option__name__iregex=query)) 
-
     
         if ctg_id == None or ctg_id == '':          
             return queryset                 
@@ -162,40 +158,12 @@ class FilterApiView(generics.ListAPIView):
             if product.color not in colors:
                 queryset = queryset.exclude(id=product.id)
             
+        if query:
+            queryset = queryset.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(option__name__iregex=query))
+        print(query)
 
         return queryset
 
-
-# products list
-class ProductsList(generics.ListAPIView):
-    serializer_class = ProductVariantSerializer
-    pagination_class = CotalogPagination
-
-
-    def get_queryset(self):
-        id = self.request.GET.get('category', 0)
-        brand = self.request.GET.get('brand', 0)
-        products = ProductVariants.objects.filter(default=True).filter(product__status='Published')
-
-        if id == '':
-            id = 0
-        
-        if brand == '':
-            brand = 0
-        
-
-        if id != 0 and brand != 0:
-            brand = get_object_or_404(Brand.objects.all(), id=int(brand))
-            ctg = get_object_or_404(Category.objects.all(), id=int(id))
-            products.filter(product__category=ctg, product__brand=brand)
-        elif id != 0:
-            ctg = get_object_or_404(Category.objects.all(), id=int(id))
-            products.filter(product__category=ctg)
-        elif brand != 0:
-            brand = get_object_or_404(Brand.objects.all(), id=int(brand))
-            products.filter(product__brand=brand)
-
-        return products
 
 
 #product list new
