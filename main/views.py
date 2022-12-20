@@ -33,8 +33,8 @@ class PopularProducts(generics.ListAPIView):
 
 # hit products
 class HitProductView(generics.ListAPIView):
-    queryset = Products.objects.filter(status='Published').filter(hit=True)
-    serializer_class = ProductVeriantRepresent
+    queryset = ProductVariants.objects.filter(default=True).filter(product__hit=True)
+    serializer_class = ProductVariantSerializer
 
 
 # popular categories
