@@ -100,9 +100,6 @@ class Order(models.Model):
         return 'Order №' + str(self.id)
 
 
-
-
-
 class OrderProducts(models.Model):
     product = models.ForeignKey(ProductVariants, on_delete=models.CASCADE)
     order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name='products')
@@ -146,3 +143,17 @@ class OrderData(models.Model):
         return f'Order №{self.order.id} data'
 
 
+# order application
+#class OrdersApplication(models.Model):
+#    product = models.ForeignKey(ProductVariants, on_delete=models.CASCADE)
+#    count = models.PositiveIntegerField('Product count')
+#    nbm = models.CharField('Tel. number', max_length=13, validators=[telephone_validator])
+#    name = models.CharField("First name", max_length=255)
+#    last_name = models.CharField("Last name", name=255)
+#    patronymic = models.CharField("Patronymic", max_length=255)
+
+#    def get_total_price(self):
+#        return int(self.count) * float(self.product.price)
+
+    #def __str__(self):
+#        return 'Application №' + ' ' + str(self.id)
