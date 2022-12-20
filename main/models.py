@@ -110,7 +110,7 @@ class ProductVariants(models.Model):
     default = models.BooleanField("Default", default=False)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, related_name='product_variants')
     qty = models.PositiveIntegerField('Qty')
-    rating = models.PositiveIntegerField('Rating', validators=[MaxValueValidator(5), MinValueValidator(1)], blank=True, null=True)
+    rating = models.IntegerField('Rating', default=0, validators=[MaxValueValidator(5), MinValueValidator(0)], blank=True, null=True)
     options = models.ManyToManyField(AtributOptions, blank=True)
     prod_of_day = models.BooleanField('Product of day', default=False)
     matching = RichTextField()
