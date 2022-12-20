@@ -27,8 +27,8 @@ class ColorsView(generics.ListAPIView):
 
 # popular products
 class PopularProducts(generics.ListAPIView):
-    queryset = Products.objects.filter(status='Published').filter(popular=True)
-    serializer_class = ProductVeriantRepresent
+    queryset = ProductVariants.objects.filter(default=True).filter(product__popular=True)
+    serializer_class = ProductVariantSerializer
 
 
 # hit products
@@ -350,5 +350,7 @@ class AddComment(generics.CreateAPIView):
         comment.save()
 
         return comment
+
+
 
         

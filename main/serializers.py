@@ -70,6 +70,7 @@ class ProductVariantSerializer(serializers.ModelSerializer):
 
         data['atributs'] = []
         data['quantity'] = 1
+        data['comments_count'] = instance.comments.count()
         
         for opt in instance.options.all():
             atribut = opt.atribut
