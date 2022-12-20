@@ -184,6 +184,10 @@ class ProductsView(generics.ListAPIView):
         if query == '':
             query = None
 
+        if query:
+            queryset = queryset.filter(Q(product__name__iregex=query) | Q(
+                color__name__iregex=query) | Q(options__name__iregex=query))
+
         print(queryset)
         ctg_id = self.request.GET.get("category", 0)
         print(ctg_id)
@@ -241,13 +245,6 @@ class ProductsView(generics.ListAPIView):
                     queryset = queryset.exclude(id=product.id)
 
         
-        if query:
-            queryset = queryset.filter(Q(product__name__iregex=query) | Q(
-                color__name__iregex=query) | Q(options__name__iregex=query))
-        print(query)
-
-
-
         return queryset
 
 
