@@ -111,6 +111,14 @@ class FilterApiView(generics.ListAPIView):
     def get_queryset(self):
         queryset = ProductVariants.objects.filter(product__status='Published')
         ctg_id = self.request.GET.get('ctg_id')
+        query = self.request.GET.get("query")
+
+        if query == '':
+            query = None
+
+        if query:
+            queryset.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(option__name__iregex=query)) 
+
     
         if ctg_id == None or ctg_id == '':          
             return queryset                 
