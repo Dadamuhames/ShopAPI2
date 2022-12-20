@@ -179,6 +179,11 @@ class ProductsView(generics.ListAPIView):
         else:
             queryset = ProductVariants.objects.filter(default=True)
 
+        query = self.request.GET.get("query")
+
+        if query == '':
+            query = None
+
         print(queryset)
         ctg_id = self.request.GET.get("category", 0)
         print(ctg_id)
@@ -235,7 +240,11 @@ class ProductsView(generics.ListAPIView):
                 if product.color not in colors:
                     queryset = queryset.exclude(id=product.id)
 
-
+        
+        if query:
+            queryset = queryset.filter(Q(product__name__iregex=query) | Q(
+                color__name__iregex=query) | Q(option__name__iregex=query))
+        print(query)
 
 
 
