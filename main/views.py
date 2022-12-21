@@ -208,7 +208,7 @@ class ProductsView(generics.ListAPIView):
                 try:
                     print("try2")
                     brand = Brand.objects.get(id=int(brand_id))
-                    queryset = queryset.filter(product_brand=brand)
+                    queryset = queryset.filter(product__brand=brand)
                     print(queryset)
                 except:
                     queryset = ProductVariants.objects.filter(id=0)
