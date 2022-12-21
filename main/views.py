@@ -349,7 +349,7 @@ class SearchCategories(views.APIView):
 
         categories = set()
         for variant in queryset:
-            ctg = variant.product.category.filter(parent=None)
+            ctg = variant.product.category.exclude(parent=None).exclude(children=None)
             if ctg.count() > 0:
                 categories.add(ctg.first())
 
