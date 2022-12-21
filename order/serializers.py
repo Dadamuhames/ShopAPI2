@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, OrderData, OrderHistory, OrderProducts, City, State, Promocode, PaymentTyps
+from .models import Order, OrderData, OrderHistory, OrderProducts, City, State, Promocode, PaymentTyps, OrderAplication
 import datetime
 from main.serializers import ProductVariantSerializer
 from main.serializers import ReqursiveCategorySerializer
@@ -106,4 +106,14 @@ class OrdersDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
+        fields = '__all__'
+
+
+
+# order aplication serializer
+class OrderAplicationSerializer(serializers.ModelSerializer):
+    product = ProductVariantSerializer()
+
+    class Meta:
+        model = OrderAplication
         fields = '__all__'

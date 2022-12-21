@@ -7,5 +7,6 @@ urlpatterns = [
     path('my_orders', views.MyOrders.as_view()),
     path('payments', views.PaymentTypeView.as_view()),
     path('get_cities', views.CityView.as_view()),
-    path("get_states", views.StatesView.as_view())
+    path("get_states", views.StatesView.as_view()),
+    path("add_aplication", views.AplicationCreateView.as_view())
 ]

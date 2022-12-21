@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from rest_framework import views, viewsets, generics, status, mixins, permissions
-from .serializers import OrderSerializer, PaymentTypeSerializer, StateSerializer, CitySerializer, OrdersDetailSerializer
+from .serializers import OrderSerializer, PaymentTypeSerializer, StateSerializer, CitySerializer, OrdersDetailSerializer, OrderAplicationSerializer
 from main.serializers import CartViewSerializer
 from rest_framework.response import Response
-from .models import Order, OrderData, OrderHistory, OrderProducts, PaymentTyps, State, City
+from .models import Order, OrderData, OrderHistory, OrderProducts, PaymentTyps, State, City, OrderAplication
 from rest_framework.permissions import IsAuthenticated
 from main.models import ProductVariants
 from .filters import OrderFilter
@@ -17,8 +17,6 @@ class BasePagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = 'page_size'
     max_page_size = 1000
-
-
 
 
 # orders list
@@ -111,6 +109,11 @@ class CityView(generics.ListAPIView):
     queryset = City.objects.all()
     serializer_class = CitySerializer
     
+
+# create aplication 
+class AplicationCreateView(generics.CreateAPIView):
+    queryset = OrderAplication.objects.all()
+    serializer_class = OrderAplicationSerializer
 
 
 
