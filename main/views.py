@@ -355,6 +355,11 @@ class SearchCategories(views.APIView):
 
 
         serializer = CtegoryDeteilSerializer(categories, many=True)
+        data = {
+            'count': len(categories),
+            'categories': serializer.data
+        }
 
-        return Response(serializer.data)
+
+        return Response(data)
 
