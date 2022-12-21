@@ -354,7 +354,7 @@ class SearchCategories(views.APIView):
                 categories.add(ctg.first())
 
 
-        serializer = CtegoryDeteilSerializer(categories, many=True)
+        serializer = CategorySerializer(categories, many=True)
         data = {
             'count': len(categories),
             'categories': serializer.data
