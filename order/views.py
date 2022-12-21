@@ -50,10 +50,13 @@ class OrderCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         order = serializer.save()
-        try:
+        if self.request.user.is_authenticated:
             order.user = self.request.user
-        except:
-            pass
+        else:
+            if not self.request.session.session_key:
+                self.request.session.cycle_key()
+            sk = self.request.session.session_key
+            order.session = sk
         order.save()
 
         # may be another name
