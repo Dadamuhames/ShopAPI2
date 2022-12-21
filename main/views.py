@@ -211,7 +211,7 @@ class ProductsView(generics.ListAPIView):
                     queryset = queryset.filter(product_brand=brand)
                     print(queryset)
                 except:
-                    pass
+                    queryset = ProductVariants.objects.filter(id=0)
 
 
         options = []
