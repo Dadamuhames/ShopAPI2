@@ -112,8 +112,6 @@ class OrdersDetailSerializer(serializers.ModelSerializer):
 
 # order aplication serializer
 class OrderAplicationSerializer(serializers.ModelSerializer):
-    product = ProductVariantSerializer()
-
     class Meta:
         model = OrderAplication
         fields = '__all__'

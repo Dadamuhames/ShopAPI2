@@ -220,19 +220,19 @@ class NewPassword(views.APIView):
 
 # log out
 class LogoutView(views.APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            access_tonen = request.data['access_token']
-            token = RefreshToken(refresh_token)
-            access = AccessToken(access_tonen)
-            access.blacklist()
-            token.blacklist()
+        #try:
+        refresh_token = request.data["refresh_token"]
+        access_tonen = request.data['access_token']
+        token = RefreshToken(refresh_token)
+        access = AccessToken(access_tonen)
+        access.blacklist()
+        token.blacklist()
 
-            return Response({'success': True}, status=status.HTTP_205_RESET_CONTENT)
-        except:
-            return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'success': True}, status=status.HTTP_205_RESET_CONTENT)
+        #except:
+        #    return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
 
 
