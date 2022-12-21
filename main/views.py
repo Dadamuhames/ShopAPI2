@@ -347,11 +347,11 @@ class SearchCategories(views.APIView):
         if query:
             queryset = ProductVariants.objects.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(options__name__iregex=query))
 
-        categories = []
+        categories = set()
         for variant in queryset:
             ctg = variant.product.category.filter(parent=None)
             if ctg.count() > 0:
-                categories.append(ctg.first())
+                categories.add(ctg.first())
 
 
         serializer = CtegoryDeteilSerializer(categories, many=True)
