@@ -193,23 +193,21 @@ class ProductsView(generics.ListAPIView):
         if ctg_id == '':
             ctg_id = 0
 
+        if brand_id == '':
+            brand_id = 0
+
         try:
             category = Category.objects.get(id=int(ctg_id))
             queryset = queryset.filter(product__category=category)
         except:
             if brand_id == 0 and 'query' not in self.request.GET:
                 return ProductVariants.objects.filter(id=0)
-
-        if brand_id == '':
-            brand_id = 0
-
-
-        try:
-            brand = Brand.objects.get(id=int(brand_id))
-            queryset = queryset.filter(product_brand=brand)
-        except:
-            if ctg_id == 0 and 'query' not in self.request.GET:
-                return ProductVariants.objects.filter(id=0)
+            else:
+                try:
+                    brand = Brand.objects.get(id=int(brand_id))
+                    queryset = queryset.filter(product_brand=brand)
+                except:
+                    pass
 
 
         options = []
