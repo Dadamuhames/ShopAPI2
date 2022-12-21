@@ -203,15 +203,14 @@ class ProductsView(generics.ListAPIView):
         except:
             print('exept1')
             if brand_id == 0 and 'query' not in self.request.GET:
+                print('if1')
                 return ProductVariants.objects.filter(id=0)
             else:
                 try:
-                    print("try2")
                     brand = Brand.objects.get(id=int(brand_id))
                     queryset = queryset.filter(product__brand=brand)
-                    print(queryset)
                 except:
-                    queryset = ProductVariants.objects.filter(id=0)
+                    return ProductVariants.objects.filter(id=0)
 
 
         options = []
@@ -333,5 +332,6 @@ class AddComment(generics.CreateAPIView):
         return comment
 
 
-
+# get search categories
+#class SearchCategories9
         
