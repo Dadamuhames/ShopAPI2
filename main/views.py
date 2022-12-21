@@ -350,7 +350,7 @@ class SearchCategories(views.APIView):
         categories = []
         for product in queryset:
             try:
-                ctg = product.category.exclude(parent=None).exclude(parent=None)
+                ctg = product.category.exclude(parent=None).exclude(parent=None).first()
                 categories.append(ctg)
             except:
                 pass

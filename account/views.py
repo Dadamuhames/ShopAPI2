@@ -209,6 +209,7 @@ class NewPassword(views.APIView):
             return Response({'error': 'nbm is incorrect'})
 
         user.set_password(password)
+        user.save()
         print(password)
 
         serializer = UserInformationSerializer(user)
