@@ -299,14 +299,13 @@ class ListSerializeView(views.APIView):
         for it in lst:
             try:
                 product = ProductVariants.objects.get(id=int(it))
-                serializer = ProductVariantSerializer(product).data
-                products.append(serializer)
+                products.append(product)
             except:
                 pass
 
-        #serializer = ProductVariantSerializer(products, many=True)
+        serializer = ProductVariantSerializer(products, many=True)
 
-        return Response(products)
+        return Response(serializer.data)
 
 
 
