@@ -202,10 +202,12 @@ class ProductsView(generics.ListAPIView):
             print('try1')
         except:
             print('exept1')
+            print('query' in self.request.GET)
             if brand_id == 0 and 'query' not in self.request.GET:
                 print('if1')
                 return ProductVariants.objects.filter(id=0)
             else:
+                print('else1')
                 try:
                     brand = Brand.objects.get(id=int(brand_id))
                     queryset = queryset.filter(product__brand=brand)
