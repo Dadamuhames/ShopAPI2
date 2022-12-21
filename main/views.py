@@ -209,6 +209,7 @@ class ProductsView(generics.ListAPIView):
                     print("try2")
                     brand = Brand.objects.get(id=int(brand_id))
                     queryset = queryset.filter(product_brand=brand)
+                    print(queryset)
                 except:
                     pass
 
