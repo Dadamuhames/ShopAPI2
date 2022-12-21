@@ -21,5 +21,6 @@ urlpatterns = [
     path('brand_ctg/<int:pk>', views.BrandCategoriew.as_view()),
     path('colors', views.ColorsView.as_view()),
     path('test', views.TesTSession.as_view()),
-    path("add_comment", views.AddComment.as_view())
+    path("add_comment", views.AddComment.as_view()),
+    path("get_search_category", views.SearchCategories.as_view())
 ]

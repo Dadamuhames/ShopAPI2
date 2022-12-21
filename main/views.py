@@ -336,6 +336,27 @@ class AddComment(generics.CreateAPIView):
 
 
 # get search categories
-#class SearchCategories(views.APIView):
-#    def get()
-        
+class SearchCategories(views.APIView):
+    def get(self, request, format=None):
+        query = request.GET.get("query")
+
+        if query == '':
+            query = None
+
+        queryset = []
+        if query:
+            queryset = ProductVariants.objects.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(options__name__iregex=query))
+
+        categories = []
+        for product in queryset:
+            try:
+                ctg = product.category.exclude(parent=None).exclude(parent=None)
+                categories.append(ctg)
+            except:
+                pass
+
+
+        serializer = CtegoryDeteilSerializer(categories, many=True)
+
+        return Response(serializer.data)
+
