@@ -217,18 +217,8 @@ class NewPassword(views.APIView):
         return Response(serializer.data)
 
 
-
-# log out
-class LogoutView(views.APIView):
-    permission_classes = (IsAuthenticated,)
-
+class BlacklistRefreshView(views.APIView):
     def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-
-            return Response({'success': True}, status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response({'success': False}, status=status.HTTP_400_BAD_REQUEST)
-
+        token = RefreshToken(request.data.get('refresh'))
+        token.blacklist()
+        return Response("Success")
