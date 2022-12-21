@@ -352,7 +352,7 @@ class SearchCategories(views.APIView):
             print(variant.product.category.all())
             ctg = variant.product.category.exclude(parent=None).exclude(parent=None)
             print(ctg)
-            if ctg.count > 0:
+            if ctg.count() > 0:
                 categories.append(ctg.first())
             print(categories)
 
