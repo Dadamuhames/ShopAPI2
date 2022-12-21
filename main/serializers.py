@@ -62,7 +62,7 @@ class ProductVariantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductVariants
-        fields = ['id', 'product', 'price', 'qty', 'images', 'color', 'matching']
+        fields = ['id', 'product', 'price', 'qty', 'images', 'color', 'matching', 'default']
 
     
     def to_representation(self, instance):

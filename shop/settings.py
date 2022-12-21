@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'account', 'order', 'colorfield',
     'ckeditor_uploader', 'ckeditor',
     'django_filters',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 #
