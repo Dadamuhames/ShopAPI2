@@ -3,7 +3,7 @@ from .models import Products, ProductVariants, Category, ProductImages, Atributs
 import django_filters.rest_framework as filter
 from .filters import ProductVariantFilter
 from django.forms.fields import FilePathField
-from account.serializers import UserInformationSerializer
+from account.serializers import UserInformationSerializer, UserSimpleSerializer
 #from easy_thumbnails_rest.serializers import ThumbnailerSerializer
  
 
@@ -138,7 +138,7 @@ class CtegoryDeteilSerializer(serializers.ModelSerializer):
 
         
 class CommentsSerializer(serializers.ModelSerializer):
-    user = UserInformationSerializer(read_only=True)
+    user = UserSimpleSerializer(read_only=True)
     class Meta:
         model = Comments
         fields = '__all__'

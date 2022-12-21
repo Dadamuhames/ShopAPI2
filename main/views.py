@@ -336,5 +336,6 @@ class AddComment(generics.CreateAPIView):
 
 
 # get search categories
-#class SearchCategories9
+#class SearchCategories(views.APIView):
+#    def get()
         

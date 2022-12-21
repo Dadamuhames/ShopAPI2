@@ -13,5 +13,6 @@ urlpatterns = [
     path('code_validate', views.CodeValidate.as_view()),
     path("update_profile", views.UpdateUSerProfileView.as_view()),
     path("update_password", views.UpdatePassword.as_view()),
-    path('reset_password', views.ResetPassword.as_view())
+    path('reset_password', views.ResetPassword.as_view()),
+    path('new_password', views.NewPassword.as_view())
 ]

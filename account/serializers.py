@@ -53,4 +53,10 @@ class PasswordSerializer(serializers.ModelSerializer):
 
 
 
+# user simple serializer
+class UserSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
 

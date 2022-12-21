@@ -176,8 +176,6 @@ class SingUpView(generics.CreateAPIView):
 
         return user
 
-    
-
 
 # set password
 class UpdatePassword(generics.UpdateAPIView):
@@ -196,3 +194,26 @@ class UpdatePassword(generics.UpdateAPIView):
 
 
         return Response(UserInformationSerializer(request.user).data)
+
+
+
+# new password
+class NewPassword(views.APIView):
+    def post(self, request, format=None):
+        password = generate_pass()
+        nbm = request.data.get("nbm")
+
+        try: 
+            user = User.objects.get(nbm=nbm)
+        except:
+            return Response({'error': 'nbm is incorrect'})
+
+        user.set_password(password)
+        print(password)
+
+        serializer = UserInformationSerializer(user)
+
+        return Response(serializer.data)
+
+
+
