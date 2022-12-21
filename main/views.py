@@ -348,9 +348,9 @@ class SearchCategories(views.APIView):
             queryset = ProductVariants.objects.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(options__name__iregex=query))
 
         categories = []
-        for product in queryset:
-            print(product.category.all())
-            ctg = product.category.exclude(parent=None).exclude(parent=None)
+        for variant in queryset:
+            print(variant.product.category.all())
+            ctg = variant.product.category.exclude(parent=None).exclude(parent=None)
             print(ctg)
             if ctg.count > 0:
                 categories.append(ctg.first())
