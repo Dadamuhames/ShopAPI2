@@ -349,12 +349,9 @@ class SearchCategories(views.APIView):
 
         categories = []
         for variant in queryset:
-            print(variant.product.category.all())
-            ctg = variant.product.category.exclude(parent=None).exclude(parent=None)
-            print(ctg)
+            ctg = variant.product.category.filter(parent=None)
             if ctg.count() > 0:
                 categories.append(ctg.first())
-            print(categories)
 
 
         serializer = CtegoryDeteilSerializer(categories, many=True)
