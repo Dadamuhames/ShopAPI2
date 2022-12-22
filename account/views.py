@@ -1,7 +1,7 @@
 from rest_framework.authtoken.models import Token
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import views, viewsets, generics, status
-from .serializers import LoginSerializer, UserInformationSerializer, PasswordSerializer, UserUpdateSerializer
+from .serializers import LoginSerializer, UserInformationSerializer, PasswordSerializer, UserUpdateSerializer, UserSimpleSerializer
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login
 from rest_framework.permissions import IsAuthenticated
@@ -136,7 +136,7 @@ class ProfileView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        user = UserInformationSerializer(request.user).data
+        user = UserSimpleSerializer(request.user).data
         return Response(user)
 
 
