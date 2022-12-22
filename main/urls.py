@@ -13,7 +13,6 @@ urlpatterns = [
     path("categories", views.GetCategories.as_view()),
     path('get_list', views.ListSerializeView.as_view()),
     path('search', views.SearchView.as_view()),
-    path("filter", views.FilterApiView.as_view()),
     path("products", views.ProductsView.as_view()),
     path('comments', views.CommentsView.as_view()),
     path('brands', views.BrandList.as_view()),
@@ -22,5 +21,6 @@ urlpatterns = [
     path('colors', views.ColorsView.as_view()),
     path('test', views.TesTSession.as_view()),
     path("add_comment", views.AddComment.as_view()),
-    path("get_search_category", views.SearchCategories.as_view())
+    path("get_search_category", views.SearchPageCategories.as_view()),
+    path("search_categories", views.SearchCategoriesView.as_view())
 ]

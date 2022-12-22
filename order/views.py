@@ -29,8 +29,8 @@ class MyOrders(generics.ListAPIView):
 
     def get_queryset(self):
         orders = Order.objects.filter(
-            user=self.request.user).exclude(status='Canseled')
-        if self.request.GET.get('status') is not None:
+            user=self.request.user).exclude(status='Отменено')
+        if self.request.GET.get('status') is not None and self.request.GET.get('status') != 'Отменено':
             status = self.request.GET.get('status')
             orders = Order.objects.filter(status=status)
 

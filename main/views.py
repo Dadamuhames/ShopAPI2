@@ -100,72 +100,6 @@ class CategoryDeteilView(generics.RetrieveAPIView):
         return self.retrieve(request, *args, **kwargs)
 
 
-
-# filter view
-class FilterApiView(generics.ListAPIView):
-    serializer_class = ProductVariantSerializer
-    filter_backends = [filter.DjangoFilterBackend]
-    pagination_class = CotalogPagination
-    filterset_class = ProductVariantFilter
-
-    def get_queryset(self):
-        queryset = ProductVariants.objects.filter(product__status='Published')
-        ctg_id = self.request.GET.get('ctg_id')
-        query = self.request.GET.get("query")
-
-        if query == '':
-            query = None
-    
-        if ctg_id == None or ctg_id == '':          
-            return queryset                 
-
-        try:
-            ctg = Category.objects.get(id=int(ctg_id))
-        except:
-            return queryset
-
-
-        queryset = queryset.filter(product__category=ctg)
-        options = []
-        for item in self.request.GET:
-            if 'atribut_' in item:
-                options.append(self.request.GET[item])
-
-        products = []
-        for product in queryset:
-            for option in product.options.all():
-                if option in options:
-                    products.append(product)
-
-        
-        for product in queryset:
-            if product not in products:
-                queryset.exclude(id=product.id)
-
-
-        
-        colors = []
-        for item in self.request.GET:
-            if 'color_' in str(item):
-                try:
-                    color = Color.objects.get(id=int(self.request.GET[item]))
-                    colors.append(color)
-                except:
-                    pass
-
-        
-        for product in queryset:
-            if product.color not in colors:
-                queryset = queryset.exclude(id=product.id)
-            
-        if query:
-            queryset = queryset.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(option__name__iregex=query))
-        print(query)
-
-        return queryset
-
-
-
 #product list new
 class ProductsView(generics.ListAPIView):
     serializer_class = ProductVariantSerializer
@@ -336,7 +270,7 @@ class AddComment(generics.CreateAPIView):
 
 
 # get search categories
-class SearchCategories(views.APIView):
+class SearchPageCategories(views.APIView):
     def get(self, request, format=None):
         query = request.GET.get("query")
 
@@ -362,4 +296,13 @@ class SearchCategories(views.APIView):
 
 
         return Response(data)
+
+
+# search categories
+class SearchCategoriesView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    filter_backends = [filters.SearchFilter]
+    pagination_class = CotalogPagination
+    search_fields = ['^name']
 
