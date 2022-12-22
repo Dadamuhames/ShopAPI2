@@ -225,10 +225,7 @@ class LogoutView(views.APIView):
     def post(self, request):
         try:
             refresh_token = request.data["refresh_token"]
-            access_tonen = request.data['access_token']
             token = RefreshToken(refresh_token)
-            access = AccessToken(access_tonen)
-            access.blacklist()
             token.blacklist()
 
             return Response({'success': True}, status=status.HTTP_205_RESET_CONTENT)
