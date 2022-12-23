@@ -152,18 +152,24 @@ class ProductsView(generics.ListAPIView):
         for item in self.request.GET:
             if 'atribut_' in str(item):
                 print(self.request.GET[item])
-                options.append(self.request.GET[item])
+                try:
+                    opt = AtributOptions.objects.get(id=int(self.request.GET[item]))
+                    options.append(opt)
+                except:
+                    pass
 
         if len(options) > 0:
+            print(options)
             products = []
             for product in queryset:
                 for option in product.options.all():
-                    if option.id in options:
+                    if option in options:
                         products.append(product)
 
             for product in queryset:
                 if product not in products:
-                    queryset = queryset.exclude(id=product.id)
+                    queryset = queryset.exclude(id=int(product.id))
+
 
         colors = []
         for item in self.request.GET:
