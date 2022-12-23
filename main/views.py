@@ -152,7 +152,7 @@ class ProductsView(generics.ListAPIView):
 
         options = []
         for item in self.request.GET:
-            if 'atribut_' in item:
+            if 'atribut_' in str(item):
                 options.append(self.request.GET[item])
 
         if len(options) > 0:
