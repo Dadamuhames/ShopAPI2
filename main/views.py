@@ -109,6 +109,7 @@ class ProductsView(generics.ListAPIView):
 
     def get_queryset(self):   
         if 'filter' in self.request.GET or 'query' in self.request.GET:
+            print('if1')
             queryset = ProductVariants.objects.all()
             query = self.request.GET.get("query")
             
@@ -119,6 +120,7 @@ class ProductsView(generics.ListAPIView):
                 queryset = queryset.filter(Q(product__name__iregex=query) | Q(color__name__iregex=query) | Q(options__name__iregex=query))
 
         else:
+            print('else1')
             queryset = ProductVariants.objects.filter(default=True)
 
         ctg_id = self.request.GET.get("category", 0)
@@ -153,7 +155,7 @@ class ProductsView(generics.ListAPIView):
         options = []
         for item in self.request.GET:
             if 'atribut_' in str(item):
-                
+                print(self.request.GET[item])
                 options.append(self.request.GET[item])
 
         if len(options) > 0:
