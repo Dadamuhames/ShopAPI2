@@ -163,7 +163,7 @@ class ProductsView(generics.ListAPIView):
 
             for product in queryset:
                 if product not in products:
-                    queryset.exclude(id=product.id)
+                    queryset = queryset.exclude(id=product.id)
 
         colors = []
         for item in self.request.GET:
