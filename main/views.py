@@ -153,13 +153,14 @@ class ProductsView(generics.ListAPIView):
         options = []
         for item in self.request.GET:
             if 'atribut_' in str(item):
+                
                 options.append(self.request.GET[item])
 
         if len(options) > 0:
             products = []
             for product in queryset:
                 for option in product.options.all():
-                    if option in options:
+                    if option.id in options:
                         products.append(product)
 
             for product in queryset:
